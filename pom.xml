@@ -7,7 +7,13 @@
     <groupId>com.panda</groupId>
     <artifactId>news-backend</artifactId>
     <version>1.0-SNAPSHOT</version>
-    
+    <modules>
+        <module>news-backend-common</module>
+        <module>news-backend-model</module>
+        <module>news-backend-service-api</module>
+        <module>news-backend-service-user</module>
+    </modules>
+
     <packaging>pom</packaging>
     <parent>
         <groupId>org.springframework.boot</groupId>
