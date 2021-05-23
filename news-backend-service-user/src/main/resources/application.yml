@@ -1,0 +1,20 @@
+##################
+# User service
+# port: 8003
+#################
+
+server:
+    port: 8003
+    tomcat:
+        uri-encoding: UTF-8
+        max-swallow-size: -1
+
+######################
+# project config
+######################
+spring:
+    application:
+        name: service-user
+    jackson:
+        date-format: yyy-MM-dd HH:mm:ss
+        time-zone: GMT-8
