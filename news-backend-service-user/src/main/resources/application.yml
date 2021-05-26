@@ -1,10 +1,8 @@
 ##################
 # User service
-# port: 8003
 #################
 
 server:
-    port: 8003
     tomcat:
         uri-encoding: UTF-8
         max-swallow-size: -1
@@ -13,6 +11,8 @@ server:
 # project config
 ######################
 spring:
+    profiles:
+        active: dev
     application:
         name: service-user
     jackson:
