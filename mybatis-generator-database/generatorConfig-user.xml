@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="MysqlContext" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <!-- general mapper file location -->
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="com.panda.my.mapper.MyMapper"/>
+        </plugin>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/news"
+                        userId="root"
+                        password="password">
+        </jdbcConnection>
+
+        <!-- generated pojo path-->
+        <javaModelGenerator targetPackage="com.panda.pojo" targetProject="mybatis-generator-database/src/main/java"/>
+
+		<!-- generated mapper path -->
+        <sqlMapGenerator targetPackage="mapper.user" targetProject="mybatis-generator-database/src/main/resources"/>
+
+		<!-- mapper java reflection -->
+        <javaClientGenerator targetPackage="com.panda.user.mapper" targetProject="mybatis-generator-database/src/main/java" type="XMLMAPPER"/>
+
+        <!-- DB tables -->
+        <table tableName="app_user"></table>
+        <table tableName="fans"></table>
+
+    </context>
+</generatorConfiguration>
