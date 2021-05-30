@@ -16,7 +16,7 @@ import java.util.List;
 public class BaseGenerator {
     public static void generator(String configFileName, boolean overwrite) throws Exception {
         List<String> warnings = new ArrayList<>();
-        File configFile = new File("generatorConfig.xml");
+        File configFile = new File(configFileName);
         ConfigurationParser cp = new ConfigurationParser(warnings);
         Configuration config = cp.parseConfiguration(configFile);
         DefaultShellCallback callback = new DefaultShellCallback(overwrite);
