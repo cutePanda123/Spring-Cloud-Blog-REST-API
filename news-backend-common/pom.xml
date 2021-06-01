@@ -30,6 +30,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-communication-sms</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 
 </project>
