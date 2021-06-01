@@ -11,25 +11,31 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SMSUtils {
-    Logger logger = LoggerFactory.getLogger(SMSUtils.class);
+    final static Logger logger = LoggerFactory.getLogger(SMSUtils.class);
 
     @Autowired
     private AzureResource azureResource;
 
-    String connectionString = azureResource.getCommunicationServiceConnectionString();
-    private final String fromPhoneNumber = "";
+    private static String connectionString;
+    private final String fromPhoneNumber = "+123456789";
+    private static SmsClient smsClient;
 
-    SmsClient smsClient = new SmsClientBuilder()
-            .connectionString(connectionString)
-            .buildClient();
+    public void sendSms(String toPhoneNumber, String code) {
+        SMSUtils.connectionString = azureResource.getConnectionString();
+        smsClient = new SmsClientBuilder()
+                .connectionString(SMSUtils.connectionString)
+                .buildClient();
 
-    public void sendSMS(String toPhoneNumber, String code) {
         SmsSendResult sendResult = smsClient.send(
                 fromPhoneNumber,
                 toPhoneNumber,
                 "Your security code is: " + code + ". It expires in 10 minutes. Do not share this code with anyone.");
-        logger.info("Message Id: " + sendResult.getMessageId());
-        logger.info("Recipient Number: " + sendResult.getTo());
-        logger.info("Send Result Successful:" + sendResult.isSuccessful());
+        SMSUtils.logger.info("Message Id: " + sendResult.getMessageId());
+        SMSUtils.logger.info("Recipient Number: " + sendResult.getTo());
+        SMSUtils.logger.info("Send Result Successful:" + sendResult.isSuccessful());
+    }
+
+    public void sendSmsMock(String toPhoneNumber, String code) {
+        SMSUtils.logger.info("mocked send sms method runs");
     }
 }
