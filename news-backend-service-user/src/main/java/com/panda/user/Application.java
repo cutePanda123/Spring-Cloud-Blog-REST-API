@@ -1,4 +1,4 @@
-package com.panda.healthcheck;
+package com.panda.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
