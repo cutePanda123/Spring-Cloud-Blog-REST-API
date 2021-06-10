@@ -1,5 +1,9 @@
 package com.panda.api.interceptors;
 
+import com.panda.exception.CustomException;
+import com.panda.exception.EncapsulatedException;
+import com.panda.json.result.ResponseResult;
+import com.panda.json.result.ResponseStatusEnum;
 import com.panda.utils.IPUtils;
 import com.panda.utils.RedisAdaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +25,7 @@ public class PassportInterceptor implements HandlerInterceptor {
         boolean exist = redisAdaptor.keyIsExist(MOBILE_SMSCODE + ":" + userIp);
 
         if (exist) {
-            // TO DO
+            EncapsulatedException.display(ResponseStatusEnum.SMS_NEED_WAIT_ERROR);
             System.out.println("send too many sms requests");
             return false;
         }
