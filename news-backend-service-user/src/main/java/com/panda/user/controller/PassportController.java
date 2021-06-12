@@ -5,10 +5,12 @@ import com.panda.api.controller.user.PassportControllerApi;
 import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.bo.RegisterLoginBO;
+import com.panda.user.service.UserService;
 import com.panda.utils.IPUtils;
 import com.panda.utils.SMSUtils;
 import com.panda.utils.extend.AzureResource;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class PassportController extends BaseController implements PassportContro
 
     @Autowired
     AzureResource azureResource;
+
+    @Autowired
+    UserService userService;
 
     @Override
     public ResponseResult getSMSCode(String mobile, HttpServletRequest request) {
