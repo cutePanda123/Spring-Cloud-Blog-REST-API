@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 @RestController
 public class PassportController extends BaseController implements PassportControllerApi {
@@ -43,24 +45,28 @@ public class PassportController extends BaseController implements PassportContro
     @Override
     public ResponseResult getSMSCode(@RequestParam String mobile, HttpServletRequest request) {
         String userIp = IPUtils.getRequestIp(request);
-        redisAdaptor.setnx60s(MOBILE_SMSCODE + ":" + userIp, userIp);
+        redisAdaptor.setnx60s(MOBILE_SMSCODE_PREFIX + ":" + userIp, userIp);
 
         int code = new Random().nextInt(100000) + 100000;
         smsUtils.sendSmsMock(mobile, String.valueOf(code));
-        redisAdaptor.set(MOBILE_SMSCODE + ":" + mobile, String.valueOf(code), 30 * 60);
+        redisAdaptor.set(MOBILE_SMSCODE_PREFIX + ":" + mobile, String.valueOf(code), 30 * 60);
 
         return ResponseResult.ok();
     }
 
     @Override
-    public ResponseResult doLogin(@Valid RegisterLoginBO registerLoginBO, BindingResult result) {
+    public ResponseResult doLogin(
+            @Valid RegisterLoginBO registerLoginBO,
+            BindingResult result,
+            HttpServletRequest request,
+            HttpServletResponse response) {
         if (result.hasErrors()) {
             return ResponseResult.errorMap(getErrors(result));
         }
 
         String mobile = registerLoginBO.getMobile();
         String smsCode = registerLoginBO.getSmsCode();
-        String redisSmsCode = redisAdaptor.get(MOBILE_SMSCODE + ":" + mobile);
+        String redisSmsCode = redisAdaptor.get(MOBILE_SMSCODE_PREFIX + ":" + mobile);
         if (StringUtils.isBlank(redisSmsCode) || !redisSmsCode.equals(smsCode)) {
             return ResponseResult.errorCustom(ResponseStatusEnum.SMS_CODE_ERROR);
         }
@@ -70,7 +76,17 @@ public class PassportController extends BaseController implements PassportContro
         } else if (user == null) {
             user = userService.createUser(mobile);
         }
+        int userActiveStatus = user.getActiveStatus();
+        if (userActiveStatus != UserAccountStatus.FROZEN.type) {
+            String token = UUID.randomUUID().toString();
+            redisAdaptor.set(REDIS_USER_TOKEN_PREFIX + ":" + user.getId(), token);
 
-        return ResponseResult.ok(mobile);
+            setCookie(request, response, "utoken", token, COOKIE_DURATION);
+            setCookie(request, response, "uid", user.getId(), COOKIE_DURATION);
+        }
+
+        redisAdaptor.del(MOBILE_SMSCODE_PREFIX + ":" + mobile);
+
+        return ResponseResult.ok(userActiveStatus);
     }
 }
