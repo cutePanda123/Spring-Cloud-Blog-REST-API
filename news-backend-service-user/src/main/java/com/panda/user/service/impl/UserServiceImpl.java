@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     public AppUser queryMobileIsExist(String mobile) {
         Example example = new Example(AppUser.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo(mobile, mobile);
+        criteria.andEqualTo("mobile", mobile);
         AppUser user = appUserMapper.selectOneByExample(example);
         return user;
     }
@@ -57,6 +57,8 @@ public class UserServiceImpl implements UserService {
         user.setTotalIncome(0);
         user.setCreatedTime(new Date());
         user.setUpdatedTime(new Date());
+
+        appUserMapper.insert(user);
         return user;
     }
 }
