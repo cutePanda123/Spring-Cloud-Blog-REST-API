@@ -3,6 +3,7 @@ package com.panda.api.controller;
 import com.panda.utils.RedisAdaptor;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -21,6 +22,9 @@ public class BaseController {
     protected static final String MOBILE_SMSCODE_PREFIX = "mobile:smscode";
     protected static final String REDIS_USER_TOKEN_PREFIX = "redis_user_token";
     protected static final Integer COOKIE_DURATION = 30 * 24 * 60 * 60;
+
+    @Value("${website.domain-name}")
+    public String DOMAIN_NAME;
 
     protected Map<String, String> getErrors(BindingResult result) {
         Map<String, String> errorMap = new HashMap<>();
@@ -50,7 +54,7 @@ public class BaseController {
                              Integer maxAge) {
         Cookie cookie = new Cookie(cookieName, cookieValue);
         cookie.setMaxAge(maxAge);
-        cookie.setDomain("news.com");
+        cookie.setDomain(DOMAIN_NAME);
         cookie.setPath("/");
         response.addCookie(cookie);
     }
