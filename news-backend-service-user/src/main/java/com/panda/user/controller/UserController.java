@@ -42,7 +42,7 @@ public class UserController extends BaseController implements UserControllerApi 
             return ResponseResult.errorMap(getErrors(result));
         }
 
-
+        userService.updateUserInfo(updateUserInfoBO);
         return ResponseResult.ok();
     }
 

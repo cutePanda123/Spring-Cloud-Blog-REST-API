@@ -2,12 +2,18 @@ package com.panda.user.service.impl;
 
 import com.panda.enums.Gender;
 import com.panda.enums.UserAccountStatus;
+import com.panda.exception.CustomException;
+import com.panda.exception.EncapsulatedException;
+import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.AppUser;
+import com.panda.pojo.bo.UpdateUserInfoBO;
 import com.panda.user.mapper.AppUserMapper;
 import com.panda.user.service.UserService;
 import com.panda.utils.DateUtils;
 import com.panda.utils.DesensitizationUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.n3r.idworker.Sid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,5 +71,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public AppUser getUser(String userId) {
         return appUserMapper.selectByPrimaryKey(userId);
+    }
+
+    @Override
+    public void updateUserInfo(UpdateUserInfoBO updateUserInfoBO) {
+        String userId = updateUserInfoBO.getId();
+        AppUser userInfo = new AppUser();
+        BeanUtils.copyProperties(updateUserInfoBO, userInfo);
+        userInfo.setUpdatedTime(new Date());
+        userInfo.setActiveStatus(UserAccountStatus.ACTIVE.type);
+        int res = appUserMapper.updateByPrimaryKeySelective(userInfo);
+        if (res != 1) {
+            EncapsulatedException.display(ResponseStatusEnum.USER_UPDATE_ERROR);
+        }
     }
 }
