@@ -6,6 +6,7 @@ import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.AppUser;
 import com.panda.pojo.bo.UpdateUserInfoBO;
+import com.panda.pojo.vo.AppUserVo;
 import com.panda.pojo.vo.UserAccountInfoVo;
 import com.panda.user.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +47,16 @@ public class UserController extends BaseController implements UserControllerApi 
         return ResponseResult.ok();
     }
 
+    @Override
+    public ResponseResult getUserInfo(String userId) {
+        if (StringUtils.isBlank(userId)) {
+            return ResponseResult.errorCustom(ResponseStatusEnum.UN_LOGIN);
+        }
+        AppUser user = getUser(userId);
+        AppUserVo appUserVo = new AppUserVo();
+        BeanUtils.copyProperties(user, appUserVo);
+        return ResponseResult.ok(appUserVo);
+    }
 
     private AppUser getUser(String userId) {
         AppUser user = userService.getUser(userId);

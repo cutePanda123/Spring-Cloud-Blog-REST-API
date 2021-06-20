@@ -12,7 +12,7 @@ import javax.validation.Valid;
 @Api(value = "User info", tags = {"User info controller"})
 @RequestMapping("/api/service-user/user")
 public interface UserControllerApi {
-    @ApiOperation(value = "Get user info", notes = "Get user info", httpMethod = "POST")
+    @ApiOperation(value = "Get user account info", notes = "Get user account info", httpMethod = "POST")
     @PostMapping("/getAccountInfo")
     public ResponseResult getAccountInfo(@RequestParam String userId);
 
@@ -21,4 +21,8 @@ public interface UserControllerApi {
     public ResponseResult updateUserInfo(
             @RequestBody @Valid UpdateUserInfoBO updateUserInfoBO,
             BindingResult result);
+
+    @ApiOperation(value = "Get user info", notes = "Get user info", httpMethod = "POST")
+    @PostMapping("/getUserInfo")
+    public ResponseResult getUserInfo(@RequestParam String userId);
 }
