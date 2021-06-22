@@ -9,6 +9,7 @@ import com.panda.pojo.bo.UpdateUserInfoBO;
 import com.panda.pojo.vo.AppUserVo;
 import com.panda.pojo.vo.UserAccountInfoVo;
 import com.panda.user.service.UserService;
+import com.panda.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,15 @@ public class UserController extends BaseController implements UserControllerApi 
     }
 
     private AppUser getUser(String userId) {
-        AppUser user = userService.getUser(userId);
+        String redisKey = REDIS_USER_INFO_PREFIX + ":" + userId;
+        String userJsonStr = redisAdaptor.get(redisKey);
+        AppUser user = null;
+        if (StringUtils.isNotBlank(userJsonStr)) {
+            user = JsonUtils.jsonToPojo(userJsonStr, AppUser.class);
+        } else {
+            user = userService.getUser(userId);
+            redisAdaptor.set(redisKey, JsonUtils.objectToJson(user));
+        }
         return user;
     }
 }

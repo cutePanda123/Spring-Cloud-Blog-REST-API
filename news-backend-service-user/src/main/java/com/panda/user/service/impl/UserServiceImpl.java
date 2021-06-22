@@ -11,6 +11,9 @@ import com.panda.user.mapper.AppUserMapper;
 import com.panda.user.service.UserService;
 import com.panda.utils.DateUtils;
 import com.panda.utils.DesensitizationUtils;
+import com.panda.utils.JsonUtils;
+import com.panda.utils.RedisAdaptor;
+import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
@@ -30,12 +33,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AppUserMapper appUserMapper;
 
+    @Autowired
+    private RedisAdaptor redisAdaptor;
+
     private static final String[] USER_AVATARS = new String[]
     {
         "http://122.152.205.72:88/group1/M00/00/05/CpoxxFw_8_qAIlFXAAAcIhVPdSg994.png",
             "http://122.152.205.72:88/group1/M00/00/05/CpoxxF6ZUySASMbOAABBAXhjY0Y649.png",
             "http://122.152.205.72:88/group1/M00/00/05/CpoxxF6ZUx6ANoEMAABTntpyjOo395.png"
     };
+
+    private static final String REDIS_USER_INFO_PREFIX = "redis_user_info";
 
     @Override
     public AppUser queryMobileIsExist(String mobile) {
@@ -84,5 +92,9 @@ public class UserServiceImpl implements UserService {
         if (res != 1) {
             EncapsulatedException.display(ResponseStatusEnum.USER_UPDATE_ERROR);
         }
+
+        // save new user info to redis cache
+        AppUser user = getUser(userId);
+        redisAdaptor.set(REDIS_USER_INFO_PREFIX + ":" + userId, JsonUtils.objectToJson(user));
     }
 }
