@@ -1,7 +1,6 @@
 package com.panda.api.controller;
 
 import com.panda.utils.RedisAdaptor;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;

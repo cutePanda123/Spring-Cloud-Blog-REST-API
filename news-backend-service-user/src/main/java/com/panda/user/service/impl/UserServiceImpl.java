@@ -84,6 +84,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserInfo(UpdateUserInfoBO updateUserInfoBO) {
         String userId = updateUserInfoBO.getId();
+        String redisKey = REDIS_USER_INFO_PREFIX + ":" + userId;
+        // delete cache to make database&redis consistent even if redis write fails
+        redisAdaptor.del(redisKey);
         AppUser userInfo = new AppUser();
         BeanUtils.copyProperties(updateUserInfoBO, userInfo);
         userInfo.setUpdatedTime(new Date());
@@ -95,6 +98,17 @@ public class UserServiceImpl implements UserService {
 
         // save new user info to redis cache
         AppUser user = getUser(userId);
-        redisAdaptor.set(REDIS_USER_INFO_PREFIX + ":" + userId, JsonUtils.objectToJson(user));
+        redisAdaptor.set(redisKey, JsonUtils.objectToJson(user));
+
+        // delete cache to make database&redis consistent even if there are user read
+        // requests between previous cache delete and database write
+        // a future optimization could be listening to database update and trigger event
+        // to sync database data to redis
+        try {
+            Thread.sleep(100);
+            redisAdaptor.del(redisKey);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
