@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
         // delete cache to make database&redis consistent even if there are user read
         // requests between previous cache delete and database write
         // a future optimization could be listening to database update and trigger event
-        // to sync database data to redis
+        // to sync database data to redis, canal can be a option
         try {
             Thread.sleep(100);
             redisAdaptor.del(redisKey);
