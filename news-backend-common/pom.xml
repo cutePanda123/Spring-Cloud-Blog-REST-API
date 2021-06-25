@@ -98,5 +98,9 @@
             <artifactId>idworker-client</artifactId>
             <version>1.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
     </dependencies>
 </project>
