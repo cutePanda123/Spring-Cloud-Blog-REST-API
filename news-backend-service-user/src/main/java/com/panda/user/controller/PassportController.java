@@ -9,6 +9,7 @@ import com.panda.pojo.AppUser;
 import com.panda.pojo.bo.RegisterLoginBO;
 import com.panda.user.service.UserService;
 import com.panda.utils.IPUtils;
+import com.panda.utils.JsonUtils;
 import com.panda.utils.SMSUtils;
 import com.panda.utils.extend.AzureResource;
 import org.apache.commons.lang3.StringUtils;
@@ -80,6 +81,7 @@ public class PassportController extends BaseController implements PassportContro
         if (userActiveStatus != UserAccountStatus.FROZEN.type) {
             String token = UUID.randomUUID().toString();
             redisAdaptor.set(REDIS_USER_TOKEN_PREFIX + ":" + user.getId(), token);
+            redisAdaptor.set(REDIS_USER_INFO_PREFIX + ":" + user.getId(), JsonUtils.objectToJson(user));
 
             setCookie(request, response, "utoken", token, COOKIE_DURATION);
             setCookie(request, response, "uid", user.getId(), COOKIE_DURATION);

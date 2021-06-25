@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class BaseInterceptor {
     @Autowired
-    private RedisAdaptor redisAdaptor;
+    protected RedisAdaptor redisAdaptor;
 
-    public static final String REDIS_USER_TOKEN_PREFIX = "redis_user_token";
+    protected static final String REDIS_USER_TOKEN_PREFIX = "redis_user_token";
+    protected static final String REDIS_USER_INFO_PREFIX = "redis_user_info";
+
     public boolean verifyUserIdToken(
             String id,
             String token,

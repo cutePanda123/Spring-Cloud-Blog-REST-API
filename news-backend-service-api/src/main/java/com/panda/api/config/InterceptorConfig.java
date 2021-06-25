@@ -1,6 +1,7 @@
 package com.panda.api.config;
 
 import com.panda.api.interceptors.PassportInterceptor;
+import com.panda.api.interceptors.UserAccountStatusInterceptor;
 import com.panda.api.interceptors.UserAuthenticationInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    public UserAccountStatusInterceptor userAccountStatusInterceptor() {
+        return new UserAccountStatusInterceptor();
+    }
+
+    @Bean
     public UserAuthenticationInterceptor userAuthenticationInterceptor() { return new UserAuthenticationInterceptor(); }
 
     @Override
@@ -25,5 +31,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(userAuthenticationInterceptor())
                 .addPathPatterns("/api/service-user/user/getAccountInfo")
                 .addPathPatterns("/api/service-user/user/updateUserInfo");
+
+//        registry.addInterceptor(userAccountStatusInterceptor())
+//                .addPathPatterns("/api/service-user/");
     }
 }
