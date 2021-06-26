@@ -91,4 +91,12 @@ public class PassportController extends BaseController implements PassportContro
 
         return ResponseResult.ok(userActiveStatus);
     }
+
+    @Override
+    public ResponseResult logout(String userId, HttpServletRequest request, HttpServletResponse response) {
+        redisAdaptor.del(REDIS_USER_TOKEN_PREFIX + ":" + userId);
+        setCookie(request, response, "utoken", "", EXPIRED_COOKIE_DURATION);
+        setCookie(request, response, "uid", "", EXPIRED_COOKIE_DURATION);
+        return ResponseResult.ok();
+    }
 }

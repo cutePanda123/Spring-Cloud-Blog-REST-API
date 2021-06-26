@@ -24,4 +24,9 @@ public interface PassportControllerApi {
                                   BindingResult result,
                                   HttpServletRequest request,
                                   HttpServletResponse response);
+    @ApiOperation(value = "Logout endpoint", notes = "Logout endpoint", httpMethod = "POST")
+    @PostMapping ("/logout")
+    public ResponseResult logout(@RequestParam String userId,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response);
 }
