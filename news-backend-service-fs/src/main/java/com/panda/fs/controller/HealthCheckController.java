@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/service-user/healtcheck")
+@RequestMapping("/api/service-fs/healthcheck")
 public class HealthCheckController {
     final static Logger logger = LoggerFactory.getLogger(HealthCheckController.class);
 
