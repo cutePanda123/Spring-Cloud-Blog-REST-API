@@ -13,6 +13,7 @@
         <module>news-backend-service-api</module>
         <module>news-backend-service-user</module>
         <module>mybatis-generator-database</module>
+        <module>news-backend-service-fs</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -1,0 +1,24 @@
+##################
+# File service
+#################
+
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        max-swallow-size: -1
+
+######################
+# project config
+######################
+spring:
+    profiles:
+        active: dev
+    application:
+        name: service-fs
+    jackson:
+        date-format: yyy-MM-dd HH:mm:ss
+        time-zone: GMT-8
+    servlet:
+        multipart:
+            max-file-size: 512000
+            max-request-size: 512000
