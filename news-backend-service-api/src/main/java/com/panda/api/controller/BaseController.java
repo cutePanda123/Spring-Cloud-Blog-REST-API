@@ -21,6 +21,7 @@ public class BaseController {
     protected static final String MOBILE_SMSCODE_PREFIX = "mobile:smscode";
     protected static final String REDIS_USER_TOKEN_PREFIX = "redis_user_token";
     protected static final String REDIS_USER_INFO_PREFIX = "redis_user_info";
+    protected static final String REDIS_ADMIN_TOKEN_PREFIX = "redis_admin_token";
     protected static final Integer COOKIE_DURATION = 30 * 24 * 60 * 60;
     protected static final Integer EXPIRED_COOKIE_DURATION = 0;
 
