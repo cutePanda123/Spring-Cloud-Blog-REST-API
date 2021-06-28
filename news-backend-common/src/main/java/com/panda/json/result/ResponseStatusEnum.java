@@ -41,7 +41,7 @@ public enum ResponseStatusEnum {
     ADMIN_PASSWORD_ERROR(564, false, "The password cannot be empty and the latter two input are inconsistent！"),
     ADMIN_CREATE_ERROR(565, false, "Failed to add administrator！"),
     ADMIN_PASSWORD_NULL_ERROR(566, false, "The password can not be blank！"),
-    ADMIN_NOT_EXIT_ERROR(567, false, "The administrator does not exist or the password is wrong！"),
+    ADMIN_NOT_EXIST_ERROR(567, false, "The administrator does not exist or the password is wrong！"),
     ADMIN_FACE_NULL_ERROR(568, false, "Face information cannot be empty！"),
     ADMIN_FACE_LOGIN_ERROR(569, false, "Face recognition failed, please try again！"),
     CATEGORY_EXIST_ERROR(570, false, "The article category already exists, please change a category name！"),
