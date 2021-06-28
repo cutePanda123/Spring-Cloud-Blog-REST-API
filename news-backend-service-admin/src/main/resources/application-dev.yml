@@ -1,0 +1,17 @@
+server:
+    port: 8005
+
+spring:
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+
+# print mybatis log in dev environment
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+website:
+    domain-name: news.com
