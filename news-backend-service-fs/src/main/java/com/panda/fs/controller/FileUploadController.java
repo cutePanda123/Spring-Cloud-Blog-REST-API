@@ -1,7 +1,7 @@
 package com.panda.fs.controller;
 
 import com.panda.api.controller.fs.FileUploadControllerApi;
-import com.panda.fs.FileResource;
+import com.panda.fs.resources.FileResource;
 import com.panda.fs.service.UploadService;
 import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;

@@ -1,4 +1,4 @@
-package com.panda.fs;
+package com.panda.fs.resources;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
