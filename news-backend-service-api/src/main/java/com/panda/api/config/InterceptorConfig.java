@@ -30,8 +30,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(userAuthenticationInterceptor())
                 .addPathPatterns("/api/service-user/user/getAccountInfo")
-                .addPathPatterns("/api/service-user/user/updateUserInfo");
-
+                .addPathPatterns("/api/service-user/user/updateUserInfo")
+                .addPathPatterns("/fs/uploadAvatar");
 //        registry.addInterceptor(userAccountStatusInterceptor())
 //                .addPathPatterns("/api/service-user/");
     }
