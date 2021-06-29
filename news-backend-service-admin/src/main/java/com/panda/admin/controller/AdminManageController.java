@@ -3,6 +3,7 @@ package com.panda.admin.controller;
 import com.panda.admin.service.AdminUserService;
 import com.panda.api.controller.BaseController;
 import com.panda.api.controller.admin.AdminManageControllerApi;
+import com.panda.exception.EncapsulatedException;
 import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.AdminUser;
@@ -40,6 +41,19 @@ public class AdminManageController extends BaseController implements AdminManage
         }
         loginSetup(adminUser, request, response);
         return ResponseResult.ok();
+    }
+
+    @Override
+    public ResponseResult isExistingUsername(String username) {
+        isExistingAdminUsername(username);
+        return ResponseResult.ok();
+    }
+
+    private void isExistingAdminUsername(String username) {
+        AdminUser user = adminUserService.queryAdminUserByUsername(username);
+        if (user != null) {
+            EncapsulatedException.display(ResponseStatusEnum.ADMIN_USERNAME_EXIST_ERROR);
+        }
     }
 
     private void loginSetup(AdminUser adminUser, HttpServletRequest request, HttpServletResponse response) {
