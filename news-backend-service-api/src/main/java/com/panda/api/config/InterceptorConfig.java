@@ -1,5 +1,6 @@
 package com.panda.api.config;
 
+import com.panda.api.interceptors.AdminAuthenticationInterceptor;
 import com.panda.api.interceptors.PassportInterceptor;
 import com.panda.api.interceptors.UserAccountStatusInterceptor;
 import com.panda.api.interceptors.UserAuthenticationInterceptor;
@@ -23,6 +24,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Bean
     public UserAuthenticationInterceptor userAuthenticationInterceptor() { return new UserAuthenticationInterceptor(); }
 
+    @Bean
+    public AdminAuthenticationInterceptor adminAuthenticationInterceptor() {
+        return new AdminAuthenticationInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(passportInterceptor())
@@ -34,5 +40,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .addPathPatterns("/fs/uploadAvatar");
 //        registry.addInterceptor(userAccountStatusInterceptor())
 //                .addPathPatterns("/api/service-user/");
+//        registry.addInterceptor(adminAuthenticationInterceptor())
+//                .addPathPatterns("/api/service-admin/isExistingUsername");
     }
 }

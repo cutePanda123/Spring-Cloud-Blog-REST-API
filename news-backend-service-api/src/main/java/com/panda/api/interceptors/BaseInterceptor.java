@@ -12,6 +12,7 @@ public class BaseInterceptor {
 
     protected static final String REDIS_USER_TOKEN_PREFIX = "redis_user_token";
     protected static final String REDIS_USER_INFO_PREFIX = "redis_user_info";
+    protected static final String REDIS_ADMIN_TOKEN_PREFIX = "redis_admin_token";
 
     public boolean verifyUserIdToken(
             String id,
