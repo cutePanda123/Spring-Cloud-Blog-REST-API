@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Api(value = "admin management controller", tags = {"admin"})
-@RequestMapping("/api/service-admin/admin-manage")
+@RequestMapping("/api/service-admin/adminMng")
 public interface AdminManageControllerApi {
     @ApiOperation(value = "admin login api", notes = "admin login api", httpMethod = "POST")
     @PostMapping("/adminLogin")
