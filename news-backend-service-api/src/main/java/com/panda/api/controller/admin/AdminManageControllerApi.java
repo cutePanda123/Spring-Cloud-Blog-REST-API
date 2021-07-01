@@ -2,6 +2,7 @@ package com.panda.api.controller.admin;
 
 import com.panda.json.result.ResponseResult;
 import com.panda.pojo.bo.AdminLoginBO;
+import com.panda.pojo.bo.NewAdminBO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
@@ -24,4 +25,10 @@ public interface AdminManageControllerApi {
     @ApiOperation(value = "check if admin name exists api", notes = "check if admin name exists api", httpMethod = "GET")
     @GetMapping("/isExistingUsername")
     public ResponseResult isExistingUsername(@RequestParam String username);
+
+    @ApiOperation(value = "create admin api", notes = "create admin api", httpMethod = "POST")
+    @PostMapping("/addNewAdmin")
+    public ResponseResult addNewAdmin(@RequestBody NewAdminBO newAdminBO,
+                                      HttpServletRequest request,
+                                      HttpServletResponse response);
 }

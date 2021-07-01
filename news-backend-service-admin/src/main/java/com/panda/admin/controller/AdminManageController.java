@@ -8,8 +8,10 @@ import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.AdminUser;
 import com.panda.pojo.bo.AdminLoginBO;
+import com.panda.pojo.bo.NewAdminBO;
 import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.validation.BindingResult;
@@ -45,11 +47,30 @@ public class AdminManageController extends BaseController implements AdminManage
 
     @Override
     public ResponseResult isExistingUsername(String username) {
-        isExistingAdminUsername(username);
+        throwExceptionIfUsernameExists(username);
         return ResponseResult.ok();
     }
 
-    private void isExistingAdminUsername(String username) {
+    @Override
+    public ResponseResult addNewAdmin(NewAdminBO newAdminBO, HttpServletRequest request, HttpServletResponse response) {
+        if (StringUtils.isBlank(newAdminBO.getImg64())) {
+            if (StringUtils.isBlank(newAdminBO.getPassword()) ||
+            StringUtils.isBlank(newAdminBO.getConfirmedPassword())) {
+                return ResponseResult.errorCustom(ResponseStatusEnum.ADMIN_PASSWORD_NULL_ERROR);
+            }
+        }
+        if (StringUtils.isNotBlank(newAdminBO.getPassword())) {
+            if (!newAdminBO.getPassword().equalsIgnoreCase(newAdminBO.getConfirmedPassword())) {
+                return ResponseResult.errorCustom(ResponseStatusEnum.ADMIN_PASSWORD_ERROR);
+            }
+        }
+        throwExceptionIfUsernameExists(newAdminBO.getUsername());
+
+        adminUserService.createAdminUser(newAdminBO);
+        return ResponseResult.ok();
+    }
+
+    private void throwExceptionIfUsernameExists(String username) {
         AdminUser user = adminUserService.queryAdminUserByUsername(username);
         if (user != null) {
             EncapsulatedException.display(ResponseStatusEnum.ADMIN_USERNAME_EXIST_ERROR);

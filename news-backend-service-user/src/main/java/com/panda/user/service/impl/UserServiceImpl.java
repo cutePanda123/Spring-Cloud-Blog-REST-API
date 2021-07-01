@@ -2,7 +2,6 @@ package com.panda.user.service.impl;
 
 import com.panda.enums.Gender;
 import com.panda.enums.UserAccountStatus;
-import com.panda.exception.CustomException;
 import com.panda.exception.EncapsulatedException;
 import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.AppUser;
