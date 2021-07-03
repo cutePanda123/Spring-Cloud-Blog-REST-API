@@ -42,5 +42,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 //                .addPathPatterns("/api/service-user/");
 //        registry.addInterceptor(adminAuthenticationInterceptor())
 //                .addPathPatterns("/api/service-admin/isExistingUsername");
+//                .addPathPatterns("/api/service-admin/addNewAdmin");
+//                .addPathPatterns("/api/service-admin/getAdminList");
     }
 }
