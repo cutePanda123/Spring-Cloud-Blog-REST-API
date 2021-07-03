@@ -30,7 +30,7 @@ public class Swagger2 {
         return new Docket(DocumentationType.SWAGGER_2)  // set api type: swagger2
                 .apiInfo(apiInfo())                 // api doc info
                 .select()
-                .apis(Predicates.or(userPredicate))
+                .apis(Predicates.or(userPredicate, adminPredicate, filesPredicate))
 //                .apis(Predicates.or(adminPredicate, articlePredicate, userPredicate, filesPredicate))
                 .paths(PathSelectors.any())         // path to all controllers
                 .build();
