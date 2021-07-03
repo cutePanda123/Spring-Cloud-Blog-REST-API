@@ -83,6 +83,15 @@ public class AdminManageController extends BaseController implements AdminManage
         return ResponseResult.ok(result);
     }
 
+    @Override
+    public ResponseResult adminLogout(String adminId, HttpServletRequest request, HttpServletResponse response) {
+        redisAdaptor.del(REDIS_ADMIN_TOKEN_PREFIX + ":" + adminId);
+        deleteCookieValue(request, response, "atoken");
+        deleteCookieValue(request, response, "aid");
+        deleteCookieValue(request, response, "aname");
+        return ResponseResult.ok();
+    }
+
     private void throwExceptionIfUsernameExists(String username) {
         AdminUser user = adminUserService.queryAdminUserByUsername(username);
         if (user != null) {

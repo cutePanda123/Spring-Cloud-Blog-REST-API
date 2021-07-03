@@ -63,4 +63,16 @@ public class BaseController {
         cookie.setPath("/");
         response.addCookie(cookie);
     }
+
+    protected void deleteCookieValue(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  String cookieName) {
+        String deletedValue = null;
+        try {
+            deletedValue = URLEncoder.encode("", "utf-8");
+            setCookieValue(request, response, cookieName, deletedValue, EXPIRED_COOKIE_DURATION);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 }

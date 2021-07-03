@@ -40,4 +40,10 @@ public interface AdminManageControllerApi {
             @RequestParam Integer page,
             @ApiParam(name = "pageSize", value = "size per page", required = false)
             @RequestParam Integer pageSize);
+
+    @ApiOperation(value = "logout api", notes = "logout api", httpMethod = "POST")
+    @PostMapping("/adminLogout")
+    public ResponseResult adminLogout(@RequestParam String adminId,
+                                      HttpServletRequest request,
+                                      HttpServletResponse response);
 }
