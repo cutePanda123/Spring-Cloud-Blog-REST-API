@@ -5,6 +5,7 @@ import com.panda.pojo.bo.AdminLoginBO;
 import com.panda.pojo.bo.NewAdminBO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,4 +32,12 @@ public interface AdminManageControllerApi {
     public ResponseResult addNewAdmin(@RequestBody NewAdminBO newAdminBO,
                                       HttpServletRequest request,
                                       HttpServletResponse response);
+
+    @ApiOperation(value = "list admin users api", notes = "list admin users api", httpMethod = "POST")
+    @PostMapping("/getAdminList")
+    public ResponseResult getAdminList(
+            @ApiParam(name = "page", value = "page number", required = false)
+            @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "size per page", required = false)
+            @RequestParam Integer pageSize);
 }

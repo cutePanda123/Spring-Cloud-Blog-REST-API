@@ -9,6 +9,7 @@ import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.AdminUser;
 import com.panda.pojo.bo.AdminLoginBO;
 import com.panda.pojo.bo.NewAdminBO;
+import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +69,18 @@ public class AdminManageController extends BaseController implements AdminManage
 
         adminUserService.createAdminUser(newAdminBO);
         return ResponseResult.ok();
+    }
+
+    @Override
+    public ResponseResult getAdminList(Integer page, Integer pageSize) {
+        if (page == null) {
+            page = DEFAULT_START_PAGE;
+        }
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        PaginationResult result = adminUserService.listAdminUsers(page, pageSize);
+        return ResponseResult.ok(result);
     }
 
     private void throwExceptionIfUsernameExists(String username) {
