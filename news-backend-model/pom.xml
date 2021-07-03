@@ -42,5 +42,9 @@
             <artifactId>hibernate-validator</artifactId>
             <version>6.1.0.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+        </dependency>
     </dependencies>
 </project>

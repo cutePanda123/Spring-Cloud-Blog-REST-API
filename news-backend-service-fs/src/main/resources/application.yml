@@ -22,6 +22,10 @@ spring:
         multipart:
             max-file-size: 512000
             max-request-size: 512000
+    data:
+        mongodb:
+            uri: mongodb://127.0.0.1:27017
+            database: news
 
 ######################
 # fastdfs config
@@ -29,4 +33,4 @@ spring:
 fdfs:
     connection-time: 30
     so-timeout: 30
-    tracker-list: 192.168.29.121:22122
+    tracker-list: 127.0.0.1:22122
