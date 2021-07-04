@@ -64,9 +64,8 @@
             <!-- mongodb -->
             <dependency>
                 <groupId>org.mongodb</groupId>
-                <artifactId>mongodb-driver</artifactId>
-                <!--mongodb-driver.version-->
-                <version>3.11.1</version>
+                <artifactId>mongo-java-driver</artifactId>
+                <version>3.12.8</version>
             </dependency>
 
             <!-- mysql -->
