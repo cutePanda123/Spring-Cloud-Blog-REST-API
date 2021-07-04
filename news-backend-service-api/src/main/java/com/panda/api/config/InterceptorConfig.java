@@ -1,9 +1,6 @@
 package com.panda.api.config;
 
-import com.panda.api.interceptors.AdminAuthenticationInterceptor;
-import com.panda.api.interceptors.PassportInterceptor;
-import com.panda.api.interceptors.UserAccountStatusInterceptor;
-import com.panda.api.interceptors.UserAuthenticationInterceptor;
+import com.panda.api.interceptors.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -29,6 +26,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
         return new AdminAuthenticationInterceptor();
     }
 
+    @Bean
+    public AdminTokenInterceptor adminTokenInterceptor() {
+        return new AdminTokenInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(passportInterceptor())
@@ -46,5 +48,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
 //                .addPathPatterns("/api/service-admin/getAdminList");
 //                .addPathPatterns("/api/service-files/fs/uploadToGridFS");
 //                .addPathPatterns("/api/service-files/fs/readInGridFS");
+        //registry.addInterceptor(adminAuthenticationInterceptor());
     }
 }

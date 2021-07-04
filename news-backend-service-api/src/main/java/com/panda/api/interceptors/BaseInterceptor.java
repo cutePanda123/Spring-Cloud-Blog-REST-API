@@ -6,6 +6,9 @@ import com.panda.utils.RedisAdaptor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 public class BaseInterceptor {
     @Autowired
     protected RedisAdaptor redisAdaptor;
@@ -14,7 +17,7 @@ public class BaseInterceptor {
     protected static final String REDIS_USER_INFO_PREFIX = "redis_user_info";
     protected static final String REDIS_ADMIN_TOKEN_PREFIX = "redis_admin_token";
 
-    public boolean verifyUserIdToken(
+    protected boolean verifyUserIdToken(
             String id,
             String token,
             String redisKeyPrefix) {
@@ -32,5 +35,19 @@ public class BaseInterceptor {
             return false;
         }
         return true;
+    }
+
+    protected String getCookie(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null || cookieName == null) {
+            return null;
+        }
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(cookieName)) {
+                String value = cookie.getValue();
+                return value;
+            }
+        }
+        return null;
     }
 }

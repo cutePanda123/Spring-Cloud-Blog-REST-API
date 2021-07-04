@@ -6,11 +6,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AdminAuthenticationInterceptor extends BaseInterceptor implements HandlerInterceptor {
+public class AdminTokenInterceptor extends BaseInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String userId = request.getHeader("aid");
-        String userToken = request.getHeader("atoken");
+        String userId = getCookie(request,"aid");
+        String userToken = getCookie(request, "atoken");
         boolean isLogin = verifyUserIdToken(userId, userToken, REDIS_ADMIN_TOKEN_PREFIX);
         return isLogin;
     }
