@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Api(value = "File upload controller", tags = {"files"})
 @RequestMapping("/api/service-files/fs")
 public interface FileUploadControllerApi {
@@ -18,5 +21,10 @@ public interface FileUploadControllerApi {
     ) throws Exception;
 
     @PostMapping("/uploadToGridFS")
-    public ResponseResult uploadAvatar(@RequestBody NewAdminBO bo) throws Exception;
+    public ResponseResult uploadToGridFS(@RequestBody NewAdminBO bo) throws Exception;
+
+    @GetMapping("/readInGridFS")
+    public void readFromGridFS(String faceId,
+                                         HttpServletRequest request,
+                                         HttpServletResponse response) throws Exception;
 }

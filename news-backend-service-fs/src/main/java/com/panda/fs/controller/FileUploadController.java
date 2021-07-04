@@ -1,12 +1,17 @@
 package com.panda.fs.controller;
 
 import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSFindIterable;
+import com.mongodb.client.gridfs.model.GridFSFile;
+import com.mongodb.client.model.Filters;
 import com.panda.api.controller.fs.FileUploadControllerApi;
+import com.panda.exception.EncapsulatedException;
 import com.panda.fs.resources.FileResource;
 import com.panda.fs.service.UploadService;
 import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.bo.NewAdminBO;
+import com.panda.utils.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -17,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
 
 
-import java.io.ByteArrayInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 
 @RestController
 public class FileUploadController implements FileUploadControllerApi {
@@ -55,13 +62,43 @@ public class FileUploadController implements FileUploadControllerApi {
     }
 
     @Override
-    public ResponseResult uploadAvatar(NewAdminBO bo) throws Exception {
+    public void readFromGridFS(String faceId,
+                                         HttpServletRequest request,
+                                         HttpServletResponse response) throws Exception {
+        if (StringUtils.isBlank(faceId) || faceId.equalsIgnoreCase("null")) {
+            EncapsulatedException.display(ResponseStatusEnum.FILE_NOT_EXIST_ERROR);
+        }
+        File faceFile = findFaceFileByFaceId(faceId);
+
+        FileUtils.downloadFileByStream(response, faceFile);
+    }
+
+    @Override
+    public ResponseResult uploadToGridFS(NewAdminBO bo) throws Exception {
         String file64 = bo.getImg64();
         byte[] bytes = new BASE64Decoder().decodeBuffer(file64);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
         ObjectId fileId = gridFSBucket.uploadFromStream(bo.getUsername() +".png", inputStream);
         String fileIdStr = fileId.toHexString();
         return ResponseResult.ok(fileIdStr);
-        //return ResponseResult.ok();
+    }
+
+    private File findFaceFileByFaceId(String faceId) throws Exception {
+        GridFSFindIterable files = gridFSBucket.find(Filters.eq("_id", new ObjectId(faceId)));
+        GridFSFile gridFSFile = files.first();
+        if (gridFSFile == null) {
+            EncapsulatedException.display(ResponseStatusEnum.FILE_NOT_EXIST_ERROR);
+        }
+        String fileName = gridFSFile.getFilename();
+
+        String tempDirPath = "/tmp/temp_faces";
+        File tempDir = new File(tempDirPath);
+        if (!tempDir.exists()) {
+            tempDir.mkdirs();
+        }
+        File file = new File(tempDirPath + "/" + fileName);
+        OutputStream os = new FileOutputStream(file);
+        gridFSBucket.downloadToStream(new ObjectId(faceId), os);
+        return file;
     }
 }
