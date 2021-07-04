@@ -44,5 +44,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 //                .addPathPatterns("/api/service-admin/isExistingUsername");
 //                .addPathPatterns("/api/service-admin/addNewAdmin");
 //                .addPathPatterns("/api/service-admin/getAdminList");
+//                .addPathPatterns("/api/service-files/fs/uploadToGridFS");
+//                .addPathPatterns("/api/service-files/fs/readInGridFS");
     }
 }
