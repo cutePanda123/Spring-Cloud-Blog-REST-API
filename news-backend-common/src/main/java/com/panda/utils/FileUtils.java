@@ -1,12 +1,10 @@
 package com.panda.utils;
 
-
-import sun.misc.BASE64Encoder;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
+import java.util.Base64;
 
 public class FileUtils {
     public static void downloadFileByStream(HttpServletResponse response, File file) {
@@ -72,7 +70,7 @@ public class FileUtils {
             e.printStackTrace();
         }
 
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(fileData);
+        Base64.Encoder encoder = Base64.getEncoder();
+        return new String(encoder.encode(fileData));
     }
 }
