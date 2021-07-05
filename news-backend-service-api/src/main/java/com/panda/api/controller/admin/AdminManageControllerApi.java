@@ -46,4 +46,10 @@ public interface AdminManageControllerApi {
     public ResponseResult adminLogout(@RequestParam String adminId,
                                       HttpServletRequest request,
                                       HttpServletResponse response);
+
+    @ApiOperation(value = "face login api", notes = "face login api", httpMethod = "POST")
+    @PostMapping("/adminFaceLogin")
+    public ResponseResult adminFaceLogin(@RequestBody AdminLoginBO bo,
+                                      HttpServletRequest request,
+                                      HttpServletResponse response);
 }

@@ -19,12 +19,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Decoder;
-
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Base64;
 
 @RestController
 public class FileUploadController implements FileUploadControllerApi {
@@ -74,9 +72,19 @@ public class FileUploadController implements FileUploadControllerApi {
     }
 
     @Override
+    public ResponseResult readFace64InGridFS(String faceId, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (StringUtils.isBlank(faceId)) {
+            return ResponseResult.errorCustom(ResponseStatusEnum.FILE_NOT_EXIST_ERROR);
+        }
+        File faceFile = findFaceFileByFaceId(faceId);
+        String base64Str = FileUtils.fileToBase64(faceFile);
+        return ResponseResult.ok(base64Str);
+    }
+
+    @Override
     public ResponseResult uploadToGridFS(NewAdminBO bo) throws Exception {
         String file64 = bo.getImg64();
-        byte[] bytes = new BASE64Decoder().decodeBuffer(file64);
+        byte[] bytes = Base64.getDecoder().decode(file64);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
         ObjectId fileId = gridFSBucket.uploadFromStream(bo.getUsername() +".png", inputStream);
         String fileIdStr = fileId.toHexString();

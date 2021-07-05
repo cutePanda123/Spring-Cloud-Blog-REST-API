@@ -27,4 +27,9 @@ public interface FileUploadControllerApi {
     public void readFromGridFS(String faceId,
                                          HttpServletRequest request,
                                          HttpServletResponse response) throws Exception;
+
+    @GetMapping("/readFace64InGridFS")
+    public ResponseResult readFace64InGridFS(String faceId,
+                               HttpServletRequest request,
+                               HttpServletResponse response) throws Exception;
 }
