@@ -36,4 +36,10 @@ public class RelatedWebsiteLinkController extends BaseController implements Rela
     public ResponseResult listRelatedLinks() {
         return ResponseResult.ok(relatedWebsiteLinkService.getAllLinks());
     }
+
+    @Override
+    public ResponseResult deleteLink(String linkId) {
+        relatedWebsiteLinkService.deleteLink(linkId);
+        return ResponseResult.ok();
+    }
 }

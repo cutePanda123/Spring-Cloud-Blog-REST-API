@@ -7,4 +7,5 @@ import java.util.List;
 public interface RelatedWebsiteLinkService {
     public void saveOrUpdateRelatedWebsiteLink(RelatedLinkBo bo);
     public List<RelatedLinkBo> getAllLinks();
+    public void deleteLink(String linkId);
 }

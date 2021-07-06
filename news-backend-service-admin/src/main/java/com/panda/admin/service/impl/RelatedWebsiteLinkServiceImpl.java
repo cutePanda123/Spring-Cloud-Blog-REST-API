@@ -11,11 +11,12 @@ import com.panda.pojo.bo.RelatedLinkBo;
 import com.panda.pojo.mo.RelatedLinkMo;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import static com.mongodb.client.model.Filters.eq;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class RelatedWebsiteLinkServiceImpl implements RelatedWebsiteLinkService 
         Date currentDate = new Date();
         mo.setCreateTime(currentDate);
         mo.setUpdateTime(currentDate);
-        mo.setId(bo.getLinkUrl());
+        mo.setId(sid.nextShort());
 
         CodecRegistry pojoCodecRegistry = org.bson.codecs.configuration.CodecRegistries.fromRegistries(
                 MongoClientSettings.getDefaultCodecRegistry(),
@@ -67,5 +68,20 @@ public class RelatedWebsiteLinkServiceImpl implements RelatedWebsiteLinkService 
             bos.add(bo);
         }
         return bos;
+    }
+
+    @Override
+    public void deleteLink(String linkId) {
+        CodecRegistry pojoCodecRegistry = org.bson.codecs.configuration.CodecRegistries.fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                org.bson.codecs.configuration.CodecRegistries.fromProviders(
+                        PojoCodecProvider.builder().automatic(true).build()));
+        MongoDatabase db = mongoClient.getDatabase(MongoClientConfig.MONGODB_NAME).withCodecRegistry(pojoCodecRegistry);
+        MongoCollection<RelatedLinkMo> linkCollection = db.getCollection(
+                MongoClientConfig.RELATED_LINKS_COLLECTION_NAME,
+                RelatedLinkMo.class
+        );
+        Bson filter = eq("_id", linkId);
+        linkCollection.deleteOne(filter);
     }
 }

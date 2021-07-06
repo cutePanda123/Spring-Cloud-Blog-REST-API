@@ -5,9 +5,7 @@ import com.panda.pojo.bo.RelatedLinkBo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -23,4 +21,8 @@ public interface RelatedWebsiteLinkControllerApi {
     @ApiOperation(value = "list related website links", notes = "list related website links", httpMethod = "POST")
     @PostMapping("/listRelatedLinks")
     public ResponseResult listRelatedLinks();
+
+    @ApiOperation(value = "delete link", notes = "delete link", httpMethod = "POST")
+    @PostMapping("/delete")
+    public ResponseResult deleteLink(@RequestParam String linkId);
 }
