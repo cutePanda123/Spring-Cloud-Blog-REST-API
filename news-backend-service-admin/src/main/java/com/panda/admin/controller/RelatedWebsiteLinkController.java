@@ -31,4 +31,9 @@ public class RelatedWebsiteLinkController extends BaseController implements Rela
         relatedWebsiteLinkService.saveOrUpdateRelatedWebsiteLink(bo);
         return ResponseResult.ok();
     }
+
+    @Override
+    public ResponseResult listRelatedLinks() {
+        return ResponseResult.ok(relatedWebsiteLinkService.getAllLinks());
+    }
 }

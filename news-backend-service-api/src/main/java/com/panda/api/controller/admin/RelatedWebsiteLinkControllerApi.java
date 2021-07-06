@@ -19,4 +19,8 @@ public interface RelatedWebsiteLinkControllerApi {
     public ResponseResult saveOrUpdateRelatedLink(
             @RequestBody @Valid RelatedLinkBo bo,
             BindingResult result);
+
+    @ApiOperation(value = "list related website links", notes = "list related website links", httpMethod = "POST")
+    @PostMapping("/listRelatedLinks")
+    public ResponseResult listRelatedLinks();
 }
