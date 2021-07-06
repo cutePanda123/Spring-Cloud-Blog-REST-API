@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GridFsConfig {
-    @Value("${spring.data.mongodb.database}")
+    @Value("${spring.data.mongodb.uri}")
     private String connectionUri;
 
     @Bean
