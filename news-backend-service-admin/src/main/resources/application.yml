@@ -33,6 +33,10 @@ spring:
             pool-name: DateSourceHikariCP
             max-lifetime: 1800000
             connection-test-query: SELECT 1
+    data:
+        mongodb:
+            uri: mongodb://127.0.0.1:27017
+            database: news
 mybatis:
     type-aliases-package: com.panda.pojo
     mapper-locations: classpath:mapper/*.xml

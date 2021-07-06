@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@SpringBootApplication(exclude = MongoAutoConfiguration.class)
+@SpringBootApplication
 @MapperScan(basePackages = "com.panda.admin.mapper")
 @ComponentScan("com.panda")
 public class Application {
