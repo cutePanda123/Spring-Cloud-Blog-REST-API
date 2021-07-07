@@ -21,4 +21,14 @@ public interface UserManagementControllerApi {
             @RequestParam Date endDate,
             @RequestParam Integer page,
             @RequestParam Integer pageSize);
+
+    @ApiOperation(value = "get user detail", notes = "get user detail", httpMethod = "POST")
+    @PostMapping("/userDetail")
+    public ResponseResult userDetail(String userId);
+
+    @ApiOperation(value = "set user account status", notes = "set user account status", httpMethod = "POST")
+    @PostMapping("/setAccountStatus")
+    public ResponseResult setAccountStatus(
+            @RequestParam String userId,
+            @RequestParam Integer status);
 }

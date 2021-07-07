@@ -11,4 +11,5 @@ public interface UserManagementService {
             Date endDate,
             Integer page,
             Integer pageSize);
+    public void setAccountStatus(String userId, Integer status);
 }

@@ -41,4 +41,12 @@ public class UserManagementServiceImpl extends BaseService implements UserManage
         List<AppUser> list = appUserMapper.selectByExample(example);
         return paginationResultBuilder(list, page);
     }
+
+    @Override
+    public void setAccountStatus(String userId, Integer status) {
+        AppUser user = new AppUser();
+        user.setId(userId);
+        user.setActiveStatus(status);
+        appUserMapper.updateByPrimaryKeySelective(user);
+    }
 }
