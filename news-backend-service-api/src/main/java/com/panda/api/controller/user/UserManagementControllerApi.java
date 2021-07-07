@@ -16,7 +16,7 @@ public interface UserManagementControllerApi {
     @PostMapping("/queryAll")
     public ResponseResult queryAll(
             @RequestParam String nickname,
-            @RequestParam String status,
+            @RequestParam Integer status,
             @RequestParam Date startDate,
             @RequestParam Date endDate,
             @RequestParam Integer page,
