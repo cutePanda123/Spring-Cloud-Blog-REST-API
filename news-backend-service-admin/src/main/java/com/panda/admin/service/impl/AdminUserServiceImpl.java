@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.panda.admin.mapper.AdminUserMapper;
 import com.panda.admin.service.AdminUserService;
+import com.panda.api.service.BaseService;
 import com.panda.exception.EncapsulatedException;
 import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.AdminUser;
@@ -21,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class AdminUserServiceImpl implements AdminUserService {
+public class AdminUserServiceImpl extends BaseService implements AdminUserService {
     @Autowired
     private AdminUserMapper adminUserMapper;
 
@@ -72,15 +73,5 @@ public class AdminUserServiceImpl implements AdminUserService {
         List<AdminUser> adminUserList = adminUserMapper.selectByExample(listAdminExample);
 
         return paginationResultBuilder(adminUserList, page);
-    }
-
-    private PaginationResult paginationResultBuilder(List<?> userList, Integer page) {
-        PageInfo<?> pageInfo = new PageInfo<>(userList);
-        PaginationResult result = new PaginationResult();
-        result.setPage(page);
-        result.setRows(userList);
-        result.setTotal(pageInfo.getTotal());
-        result.setRecords(pageInfo.getPages());
-        return  result;
     }
 }
