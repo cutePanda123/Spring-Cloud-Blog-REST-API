@@ -22,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @RestController
 public class FileUploadController implements FileUploadControllerApi {
@@ -57,6 +59,38 @@ public class FileUploadController implements FileUploadControllerApi {
         }
         String finalPath = fileResource.getHost() + path;
         return ResponseResult.ok(finalPath);
+    }
+
+    @Override
+    public ResponseResult uploadFiles(String userId, MultipartFile[] files) throws Exception {
+        if (files == null || files.length == 0) {
+            return ResponseResult.errorCustom(ResponseStatusEnum.FILE_UPLOAD_NULL_ERROR);
+        }
+        List<String> uploadedFilePaths = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String fileName = file.getOriginalFilename();
+            if (file == null || StringUtils.isBlank(fileName)) {
+                continue;
+            }
+            String[] fileNameParts = fileName.split("\\.");
+            String suffix = fileNameParts[fileNameParts.length - 1];
+            if (!suffix.equalsIgnoreCase("png") &&
+                    !suffix.equalsIgnoreCase("jpg") &&
+                    !suffix.equalsIgnoreCase("jpeg")
+            ) {
+                continue;
+            }
+            // TODO: review and audit the uploaded image
+            String path = uploadService.uploadFile(file, suffix);
+            logger.info("path: " + path);
+            if (StringUtils.isBlank(path)) {
+                continue;
+            }
+            String finalPath = fileResource.getHost() + path;
+            uploadedFilePaths.add(finalPath);
+        }
+
+        return ResponseResult.ok(uploadedFilePaths);
     }
 
     @Override

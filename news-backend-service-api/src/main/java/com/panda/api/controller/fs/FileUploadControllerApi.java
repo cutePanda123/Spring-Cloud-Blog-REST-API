@@ -20,6 +20,13 @@ public interface FileUploadControllerApi {
             MultipartFile file
     ) throws Exception;
 
+    @ApiOperation(value = "upload multiple files api", notes = "upload multiple files api", httpMethod = "POST")
+    @PostMapping("/uploadFiles")
+    public ResponseResult uploadFiles(
+            @RequestParam String userId,
+            MultipartFile[] files
+    ) throws Exception;
+
     @PostMapping("/uploadToGridFS")
     public ResponseResult uploadToGridFS(@RequestBody NewAdminBO bo) throws Exception;
 
