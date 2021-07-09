@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GridFsConfig {
-    @Value("${spring.data.mongodb.uri}")
-    private String connectionUri;
+    @Value("${spring.data.mongodb.database}")
+    private String databaseName;
 
     @Bean
     public GridFSBucket gridFSBucket(MongoClient mongoClient) {
-        MongoDatabase database = mongoClient.getDatabase(connectionUri);
+        MongoDatabase database = mongoClient.getDatabase(databaseName);
         GridFSBucket bucket = GridFSBuckets.create(database);
         return bucket;
     }
