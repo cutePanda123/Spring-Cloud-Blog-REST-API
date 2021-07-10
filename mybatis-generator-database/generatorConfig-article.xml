@@ -30,6 +30,7 @@
 
         <!-- DB tables -->
         <table tableName="comments"></table>
+        <table tableName="article"></table>
 
     </context>
 </generatorConfiguration>
