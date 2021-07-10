@@ -3,9 +3,9 @@ package com.panda.enums;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum FaceCompareType {
-    base64(1, "compare image base 64 code"),
-    imageUrl(0, "compare image from an url");
+public enum ArticleCoverType {
+    image(1, "image"),
+    text(2, "text");
 
     public final Integer type;
     public final String value;
