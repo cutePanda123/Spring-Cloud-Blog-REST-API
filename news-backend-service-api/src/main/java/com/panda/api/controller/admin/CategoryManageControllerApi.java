@@ -23,9 +23,9 @@ public interface CategoryManageControllerApi {
 
     @PostMapping("listCategory")
     @ApiOperation(value = "list category (admin)", notes = "list category (admin)", httpMethod = "POST")
-    public ResponseResult listCategory1();
+    public ResponseResult listCategoryForAdmin();
 
     @GetMapping("listCategory")
     @ApiOperation(value = "list category (user)", notes = "list category (user)", httpMethod = "GET")
-    public ResponseResult listCategory2();
+    public ResponseResult listCategoryForUser();
 }

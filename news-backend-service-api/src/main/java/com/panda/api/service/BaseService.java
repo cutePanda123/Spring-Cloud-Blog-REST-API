@@ -6,6 +6,7 @@ import com.panda.utils.PaginationResult;
 import java.util.List;
 
 public class BaseService {
+    protected static final String REDIS_ALL_CATEGORY_KEY = "redis_all_category";
     protected PaginationResult paginationResultBuilder(List<?> list, Integer page) {
         PageInfo<?> pageInfo = new PageInfo<>(list);
         PaginationResult result = new PaginationResult();
