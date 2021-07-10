@@ -2,6 +2,7 @@ package com.panda.article.controller;
 
 import com.panda.api.controller.BaseController;
 import com.panda.api.controller.article.ArticleControllerApi;
+import com.panda.article.service.ArticleService;
 import com.panda.enums.ArticleCoverType;
 import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
@@ -24,6 +25,9 @@ public class ArticleController extends BaseController implements ArticleControll
     @Autowired
     private RedisAdaptor redisAdaptor;
 
+    @Autowired
+    private ArticleService articleService;
+
     @Override
     public ResponseResult createArticle(@Valid CreateArticleBo bo, BindingResult result) {
         if (result.hasErrors()) {
@@ -40,13 +44,14 @@ public class ArticleController extends BaseController implements ArticleControll
             return ResponseResult.errorCustom(ResponseStatusEnum.SYSTEM_OPERATION_ERROR);
         }
         List<Category> categoryList = JsonUtils.jsonToList(categories, Category.class);
-        Category target = categoryList
+        Category category = categoryList
                 .stream()
-                .filter(category -> category.getId() == bo.getCategoryId())
+                .filter(item -> item.getId() == bo.getCategoryId())
                 .findAny().orElse(null);
-        if (target == null) {
+        if (category == null) {
             return ResponseResult.errorCustom(ResponseStatusEnum.ARTICLE_CATEGORY_NOT_EXIST_ERROR);
         }
-        return null;
+        articleService.createArticle(bo, category);
+        return ResponseResult.ok();
     }
 }
