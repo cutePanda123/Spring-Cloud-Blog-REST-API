@@ -22,11 +22,18 @@ public interface ArticleControllerApi {
 
     @PostMapping("list")
     @ApiOperation(value = "list articles", notes = "list articles", httpMethod = "POST")
-    public ResponseResult list(@RequestParam String userId,
+    public ResponseResult listForUser(@RequestParam String userId,
                                @RequestParam String keyword,
                                @RequestParam Integer status,
                                @RequestParam Date startDate,
                                @RequestParam Date endDate,
+                               @RequestParam Integer page,
+                               @RequestParam Integer pageSize);
+
+    @PostMapping("admin/list")
+    @ApiOperation(value = "list articles for admin", notes = "list articles for admin", httpMethod = "POST")
+    public ResponseResult listForAdmin(
+                               @RequestParam Integer status,
                                @RequestParam Integer page,
                                @RequestParam Integer pageSize);
 }

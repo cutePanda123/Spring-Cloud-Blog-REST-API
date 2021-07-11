@@ -96,4 +96,22 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         List<Article> articles = articleMapper.selectByExample(example);
         return paginationResultBuilder(articles, page);
     }
+
+    @Override
+    public PaginationResult listArticlesWithStatus(Integer status, Integer page, Integer pageSize) {
+        Example example = new Example(Article.class);
+        example.orderBy("createTime").desc();
+        Example.Criteria criteria = example.createCriteria();
+        if (ArticleReviewStatus.isValidStatus(status)) {
+            criteria.andEqualTo("articleStatus", status);
+        }
+        if (status != null && status == GENERAL_REVIEWING_STATUS) {
+            criteria.andEqualTo("articleStatus", ArticleReviewStatus.reviewing.type)
+                    .orEqualTo("articleStatus", ArticleReviewStatus.waitingManual.type);
+        }
+
+        PageHelper.startPage(page, pageSize);
+        List<Article> articles = articleMapper.selectByExample(example);
+        return paginationResultBuilder(articles, page);
+    }
 }

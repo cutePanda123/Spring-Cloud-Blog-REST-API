@@ -58,7 +58,7 @@ public class ArticleController extends BaseController implements ArticleControll
     }
 
     @Override
-    public ResponseResult list(String userId, String keyword, Integer status, Date startDate, Date endDate, Integer page, Integer pageSize) {
+    public ResponseResult listForUser(String userId, String keyword, Integer status, Date startDate, Date endDate, Integer page, Integer pageSize) {
         if (StringUtils.isBlank(userId)) {
             return ResponseResult.errorCustom(ResponseStatusEnum.ARTICLE_QUERY_PARAMS_ERROR);
         }
@@ -69,6 +69,18 @@ public class ArticleController extends BaseController implements ArticleControll
             pageSize = DEFAULT_PAGE_SIZE;
         }
         PaginationResult result = articleService.listArticles(userId, keyword, status, startDate, endDate, page, pageSize);
+        return ResponseResult.ok(result);
+    }
+
+    @Override
+    public ResponseResult listForAdmin(Integer status, Integer page, Integer pageSize) {
+        if (page == null) {
+            page = DEFAULT_START_PAGE;
+        }
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        PaginationResult result = articleService.listArticlesWithStatus(status, page, pageSize);
         return ResponseResult.ok(result);
     }
 }
