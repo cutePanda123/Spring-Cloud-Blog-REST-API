@@ -16,4 +16,8 @@ public interface ArticleService {
     public PaginationResult listArticlesWithStatus(Integer status, Integer page, Integer pageSize);
 
     public void updateArticleReviewStatus(String articleId, Integer status);
+
+    public void deleteArticle(String userId, String articleId);
+
+    public void withdrawArticle(String userId, String articleId);
 }

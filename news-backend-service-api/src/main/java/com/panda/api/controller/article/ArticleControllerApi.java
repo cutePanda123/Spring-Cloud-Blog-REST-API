@@ -42,4 +42,16 @@ public interface ArticleControllerApi {
     public ResponseResult reviewArticle(
             @RequestParam String articleId,
             @RequestParam Integer isPassed);
+
+    @PostMapping("user/delete")
+    @ApiOperation(value = "user delete article", notes = "user delete article", httpMethod = "POST")
+    public ResponseResult deleteArticle(
+            @RequestParam String userId,
+            @RequestParam String articleId);
+
+    @PostMapping("user/withdraw")
+    @ApiOperation(value = "user withdraw article", notes = "user withdraw article", httpMethod = "POST")
+    public ResponseResult withdrawArticle(
+            @RequestParam String userId,
+            @RequestParam String articleId);
 }

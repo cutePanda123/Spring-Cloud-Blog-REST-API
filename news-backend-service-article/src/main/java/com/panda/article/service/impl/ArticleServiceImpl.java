@@ -116,6 +116,26 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         return paginationResultBuilder(articles, page);
     }
 
+    @Override
+    public void deleteArticle(String userId, String articleId) {
+        Example example = exampleBuilder(userId, articleId);
+        Article article = new Article();
+        article.setIsDelete(YesNoType.yes.type);
+        if (articleMapper.updateByExampleSelective(article, example) != 1) {
+            EncapsulatedException.display(ResponseStatusEnum.ARTICLE_WITHDRAW_ERROR);
+        }
+    }
+
+    @Override
+    public void withdrawArticle(String userId, String articleId) {
+        Example example = exampleBuilder(userId, articleId);
+        Article article = new Article();
+        article.setArticleStatus(ArticleReviewStatus.withdraw.type);
+        if (articleMapper.updateByExampleSelective(article, example) != 1) {
+            EncapsulatedException.display(ResponseStatusEnum.ARTICLE_WITHDRAW_ERROR);
+        }
+    }
+
     @Transactional
     @Override
     public void updateArticleReviewStatus(String articleId, Integer status) {
@@ -129,9 +149,11 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         }
     }
 
-   /* @Transactional
-    @Override
-    public void deleteArticle(String userId, String articleId) {
-
-    }*/
+    private Example exampleBuilder(String userId, String articleId) {
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("publishUserId", userId);
+        criteria.andEqualTo("id", articleId);
+        return example;
+    }
 }

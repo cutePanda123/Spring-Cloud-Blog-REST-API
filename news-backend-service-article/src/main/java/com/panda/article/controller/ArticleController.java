@@ -99,4 +99,16 @@ public class ArticleController extends BaseController implements ArticleControll
         articleService.updateArticleReviewStatus(articleId, reviewStatus);
         return ResponseResult.ok();
     }
+
+    @Override
+    public ResponseResult deleteArticle(String userId, String articleId) {
+        articleService.deleteArticle(userId, articleId);
+        return ResponseResult.ok();
+    }
+
+    @Override
+    public ResponseResult withdrawArticle(String userId, String articleId) {
+        articleService.withdrawArticle(userId, articleId);
+        return ResponseResult.ok();
+    }
 }
