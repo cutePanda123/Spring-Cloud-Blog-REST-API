@@ -36,4 +36,10 @@ public interface ArticleControllerApi {
                                @RequestParam Integer status,
                                @RequestParam Integer page,
                                @RequestParam Integer pageSize);
+
+    @PostMapping("admin/review")
+    @ApiOperation(value = "review article", notes = "review article", httpMethod = "POST")
+    public ResponseResult reviewArticle(
+            @RequestParam String articleId,
+            @RequestParam Integer isPassed);
 }

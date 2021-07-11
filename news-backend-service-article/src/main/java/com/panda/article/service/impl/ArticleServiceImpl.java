@@ -15,6 +15,7 @@ import com.panda.pojo.Category;
 import com.panda.pojo.bo.CreateArticleBo;
 import com.panda.utils.PaginationResult;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,4 +115,23 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         List<Article> articles = articleMapper.selectByExample(example);
         return paginationResultBuilder(articles, page);
     }
+
+    @Transactional
+    @Override
+    public void updateArticleReviewStatus(String articleId, Integer status) {
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("id", articleId);
+        Article article = new Article();
+        article.setArticleStatus(status);
+        if (articleMapper.updateByExampleSelective(article, example) != 1) {
+            EncapsulatedException.display(ResponseStatusEnum.ARTICLE_REVIEW_ERROR);
+        }
+    }
+
+   /* @Transactional
+    @Override
+    public void deleteArticle(String userId, String articleId) {
+
+    }*/
 }
