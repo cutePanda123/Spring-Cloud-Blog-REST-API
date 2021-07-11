@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.panda.admin.mongodb.MongoClientConfig;
 import com.panda.admin.service.RelatedWebsiteLinkService;
+import com.panda.enums.YesNoType;
 import com.panda.pojo.bo.RelatedLinkBo;
 import com.panda.pojo.mo.RelatedLinkMo;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -20,6 +21,7 @@ import static com.mongodb.client.model.Filters.eq;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RelatedWebsiteLinkServiceImpl implements RelatedWebsiteLinkService {
@@ -29,7 +31,7 @@ public class RelatedWebsiteLinkServiceImpl implements RelatedWebsiteLinkService 
     private Sid sid;
 
     @Override
-    public void saveOrUpdateRelatedWebsiteLink(RelatedLinkBo bo) {
+    public void setRelatedWebsiteLink(RelatedLinkBo bo) {
         RelatedLinkMo mo = new RelatedLinkMo();
         BeanUtils.copyProperties(bo, mo);
         Date currentDate = new Date();
@@ -83,5 +85,11 @@ public class RelatedWebsiteLinkServiceImpl implements RelatedWebsiteLinkService 
         );
         Bson filter = eq("_id", linkId);
         linkCollection.deleteOne(filter);
+    }
+
+    @Override
+    public List<RelatedLinkBo> getAliveLinks() {
+        List<RelatedLinkBo> links = getAllLinks();
+        return links.stream().filter(link -> link.getIsDelete() == YesNoType.no.type).collect(Collectors.toList());
     }
 }

@@ -25,4 +25,8 @@ public interface RelatedWebsiteLinkControllerApi {
     @ApiOperation(value = "delete link", notes = "delete link", httpMethod = "POST")
     @PostMapping("/delete")
     public ResponseResult deleteLink(@RequestParam String linkId);
+
+    @ApiOperation(value = "list related website links for user", notes = "list related website links for user", httpMethod = "GET")
+    @GetMapping("user/list")
+    public ResponseResult listAliveLinks();
 }

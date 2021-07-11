@@ -28,7 +28,7 @@ public class RelatedWebsiteLinkController extends BaseController implements Rela
             log.error(result.toString());
             return ResponseResult.errorMap(map);
         }
-        relatedWebsiteLinkService.saveOrUpdateRelatedWebsiteLink(bo);
+        relatedWebsiteLinkService.setRelatedWebsiteLink(bo);
         return ResponseResult.ok();
     }
 
@@ -41,5 +41,10 @@ public class RelatedWebsiteLinkController extends BaseController implements Rela
     public ResponseResult deleteLink(String linkId) {
         relatedWebsiteLinkService.deleteLink(linkId);
         return ResponseResult.ok();
+    }
+
+    @Override
+    public ResponseResult listAliveLinks() {
+        return ResponseResult.ok(relatedWebsiteLinkService.getAliveLinks());
     }
 }
