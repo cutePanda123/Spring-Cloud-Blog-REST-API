@@ -9,6 +9,7 @@ import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.Category;
 import com.panda.pojo.bo.CreateArticleBo;
 import com.panda.utils.JsonUtils;
+import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -53,5 +55,20 @@ public class ArticleController extends BaseController implements ArticleControll
         }
         articleService.createArticle(bo, category);
         return ResponseResult.ok();
+    }
+
+    @Override
+    public ResponseResult list(String userId, String keyword, Integer status, Date startDate, Date endDate, Integer page, Integer pageSize) {
+        if (StringUtils.isBlank(userId)) {
+            return ResponseResult.errorCustom(ResponseStatusEnum.ARTICLE_QUERY_PARAMS_ERROR);
+        }
+        if (page == null) {
+            page = DEFAULT_START_PAGE;
+        }
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        PaginationResult result = articleService.listArticles(userId, keyword, status, startDate, endDate, page, pageSize);
+        return ResponseResult.ok(result);
     }
 }
