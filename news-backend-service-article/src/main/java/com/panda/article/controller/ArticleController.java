@@ -16,6 +16,7 @@ import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,7 @@ public class ArticleController extends BaseController implements ArticleControll
     @Autowired
     private ArticleService articleService;
 
+    @Transactional
     @Override
     public ResponseResult createArticle(@Valid CreateArticleBo bo, BindingResult result) {
         if (result.hasErrors()) {
@@ -86,6 +88,7 @@ public class ArticleController extends BaseController implements ArticleControll
         return ResponseResult.ok(result);
     }
 
+    @Transactional
     @Override
     public ResponseResult reviewArticle(String articleId, Integer isPassed) {
         Integer reviewStatus = null;
@@ -100,12 +103,14 @@ public class ArticleController extends BaseController implements ArticleControll
         return ResponseResult.ok();
     }
 
+    @Transactional
     @Override
     public ResponseResult deleteArticle(String userId, String articleId) {
         articleService.deleteArticle(userId, articleId);
         return ResponseResult.ok();
     }
 
+    @Transactional
     @Override
     public ResponseResult withdrawArticle(String userId, String articleId) {
         articleService.withdrawArticle(userId, articleId);
