@@ -17,8 +17,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class UserController extends BaseController implements UserControllerApi {
@@ -57,6 +60,24 @@ public class UserController extends BaseController implements UserControllerApi 
         AppUserVo appUserVo = new AppUserVo();
         BeanUtils.copyProperties(user, appUserVo);
         return ResponseResult.ok(appUserVo);
+    }
+
+    @Override
+    public ResponseResult listUsers(String userIds) {
+        if (StringUtils.isBlank(userIds)) {
+            return ResponseResult.errorCustom(ResponseStatusEnum.USER_UPDATE_ERROR);
+        }
+        List<AppUserVo> userVos = new ArrayList<>();
+        List<String> userIdList = JsonUtils.jsonToList(userIds, String.class);
+        userIdList.forEach(userId -> {
+            AppUser user = getUser(userId);
+            AppUserVo userVo = new AppUserVo();
+            BeanUtils.copyProperties(user, userVo);
+            userVos.add(userVo);
+            userVos.add(userVo);
+        });
+
+        return ResponseResult.ok(userVos);
     }
 
     private AppUser getUser(String userId) {

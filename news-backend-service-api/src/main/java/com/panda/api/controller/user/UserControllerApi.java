@@ -25,4 +25,8 @@ public interface UserControllerApi {
     @ApiOperation(value = "Get user info", notes = "Get user info", httpMethod = "POST")
     @PostMapping("/getUserInfo")
     public ResponseResult getUserInfo(@RequestParam String userId);
+
+    @ApiOperation(value = "list users", notes = "list users", httpMethod = "GET")
+    @GetMapping("/list")
+    public ResponseResult listUsers(@RequestHeader("userIds") String userIds);
 }
