@@ -10,21 +10,20 @@ import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
 public class ArticlePortalController extends BaseController implements ArticlePortalControllerApi {
     @Autowired
     private RedisAdaptor redisAdaptor;
-
     @Autowired
     private ArticleService articleService;
-
     @Autowired
     private ArticlePortalService articlePortalService;
 
     @Override
-    public ResponseResult listForUser(String keyword, Integer category, Integer page, Integer pageSize) {
+    public ResponseResult listArticleForUser(String keyword, Integer category, Integer page, Integer pageSize) {
         if (page == null) {
             page = DEFAULT_START_PAGE;
         }

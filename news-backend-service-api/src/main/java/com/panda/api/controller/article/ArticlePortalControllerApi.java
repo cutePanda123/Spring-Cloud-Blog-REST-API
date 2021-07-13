@@ -12,7 +12,7 @@ import java.util.Date;
 public interface ArticlePortalControllerApi {
     @GetMapping("list")
     @ApiOperation(value = "portal list articles", notes = "portal list articles", httpMethod = "GET")
-    public ResponseResult listForUser(@RequestParam String keyword,
+    public ResponseResult listArticleForUser(@RequestParam String keyword,
                                       @RequestParam Integer category,
                                       @RequestParam Integer page,
                                       @RequestParam Integer pageSize);
