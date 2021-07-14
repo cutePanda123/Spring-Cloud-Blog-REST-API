@@ -5,8 +5,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-
 @Api(value = "portal article controller", tags = {"portal article controller"})
 @RequestMapping("/api/service-article/article/portal")
 public interface ArticlePortalControllerApi {
@@ -16,4 +14,8 @@ public interface ArticlePortalControllerApi {
                                       @RequestParam Integer category,
                                       @RequestParam Integer page,
                                       @RequestParam Integer pageSize);
+
+    @GetMapping("list/populars")
+    @ApiOperation(value = "list popular articles", notes = "list popular articles", httpMethod = "GET")
+    public ResponseResult listPopularArticles();
 }

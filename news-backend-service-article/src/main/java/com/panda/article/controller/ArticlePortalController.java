@@ -33,4 +33,9 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         PaginationResult result = articlePortalService.listArticles(keyword, category, page, pageSize);
         return ResponseResult.ok(result);
     }
+
+    @Override
+    public ResponseResult listPopularArticles() {
+        return ResponseResult.ok(articlePortalService.listPopularArticles());
+    }
 }

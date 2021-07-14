@@ -13,6 +13,7 @@ import com.panda.pojo.vo.ArticleVo;
 import com.panda.utils.JsonUtils;
 import com.panda.utils.PaginationResult;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,13 +42,8 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
 
     @Override
     public PaginationResult listArticles(String keyword, Integer category, Integer page, Integer pageSize) {
-        Example example = new Example(Article.class);
-        example.orderBy("publishTime").desc();
+        Example example = buildDefaultExample();
         Example.Criteria criteria = example.createCriteria();
-
-        criteria.andEqualTo("isAppoint", YesNoType.no.type);
-        criteria.andEqualTo("isDelete", YesNoType.no.type);
-        criteria.andEqualTo("articleStatus", ArticleReviewStatus.success.type);
         if (StringUtils.isNotBlank(keyword)) {
             criteria.andLike("title", "%" + keyword + "%");
         }
@@ -86,6 +82,20 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         return paginationResultBuilder(articleVoList, page);
     }
 
+    @Override
+    public List<ArticleVo> listPopularArticles() {
+        Example example = buildDefaultExample();
+        PageHelper.startPage(1, 5);
+        List<Article> articleList = articleMapper.selectByExample(example);
+        List<ArticleVo> articleVoList = new LinkedList<>();
+        articleList.forEach(article -> {
+            ArticleVo vo = new ArticleVo();
+            BeanUtils.copyProperties(article, vo);
+            articleVoList.add(vo);
+        });
+        return articleVoList;
+    }
+
     private AppUserVo getArticlePublisher(String publisherId, List<AppUserVo> userVoList) {
         for (AppUserVo userVo : userVoList) {
             if (userVo.getId().equalsIgnoreCase(publisherId)) {
@@ -93,5 +103,16 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
             }
         }
         return null;
+    }
+
+    private Example buildDefaultExample() {
+        Example example = new Example(Article.class);
+        example.orderBy("publishTime").desc();
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("isAppoint", YesNoType.no.type);
+        criteria.andEqualTo("isDelete", YesNoType.no.type);
+        criteria.andEqualTo("articleStatus", ArticleReviewStatus.success.type);
+        return example;
     }
 }
