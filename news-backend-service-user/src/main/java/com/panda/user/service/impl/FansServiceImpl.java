@@ -1,16 +1,20 @@
 package com.panda.user.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.panda.api.service.BaseService;
 import com.panda.pojo.AppUser;
 import com.panda.pojo.Fans;
 import com.panda.user.mapper.FansMapper;
 import com.panda.user.service.FansService;
 import com.panda.user.service.UserService;
+import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class FansServiceImpl extends BaseService implements FansService {
@@ -75,5 +79,20 @@ public class FansServiceImpl extends BaseService implements FansService {
     public int getFansCount(String userId) {
         String count = redisAdaptor.get(REDIS_WRITER_FANS_COUNTS_PREFIX + ":" + userId);
         return count == null ? 0 : Integer.valueOf(count);
+    }
+
+    @Override
+    public PaginationResult listFans(String writerId, Integer page, Integer pageSize) {
+        Fans fans = new Fans();
+        fans.setWriterId(writerId);
+        if (page == null) {
+            page = DEFAULT_START_PAGE;
+        }
+        if (pageSize == null) {
+            page = DEFAULT_PAGE_SIZE;
+        }
+        PageHelper.startPage(page, pageSize);
+        List<Fans> fansList = fansMapper.select(fans);
+        return paginationResultBuilder(fansList, page);
     }
 }

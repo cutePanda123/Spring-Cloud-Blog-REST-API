@@ -3,6 +3,7 @@ package com.panda.api.controller.user;
 import com.panda.json.result.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,4 +43,17 @@ public interface FansControllerApi {
             @RequestParam String writerId,
             @RequestParam String userId
     );
+
+    @ApiOperation(
+            value = "a user unfollows a writer",
+            notes = "a user unfollows a writer",
+            httpMethod = "POST"
+    )
+    @PostMapping("/list")
+    public ResponseResult listFans(
+            @RequestParam String writerId,
+            @ApiParam(name = "page", value = "page number", required = false)
+            @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "size per page", required = false)
+            @RequestParam Integer pageSize);
 }
