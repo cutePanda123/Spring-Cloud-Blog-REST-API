@@ -21,4 +21,25 @@ public interface FansControllerApi {
             @RequestParam String userId
     );
 
+    @ApiOperation(
+            value = "a user follows a writer",
+            notes = "a user follows a writer",
+            httpMethod = "POST"
+    )
+    @PostMapping("/follow")
+    public ResponseResult follow(
+            @RequestParam String writerId,
+            @RequestParam String userId
+    );
+
+    @ApiOperation(
+            value = "a user unfollows a writer",
+            notes = "a user unfollows a writer",
+            httpMethod = "POST"
+    )
+    @PostMapping("/unfollow")
+    public ResponseResult unfollow(
+            @RequestParam String writerId,
+            @RequestParam String userId
+    );
 }
