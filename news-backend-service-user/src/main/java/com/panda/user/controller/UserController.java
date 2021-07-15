@@ -8,6 +8,7 @@ import com.panda.pojo.AppUser;
 import com.panda.pojo.bo.UpdateUserInfoBO;
 import com.panda.pojo.vo.AppUserVo;
 import com.panda.pojo.vo.UserAccountInfoVo;
+import com.panda.user.service.FansService;
 import com.panda.user.service.UserService;
 import com.panda.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +30,9 @@ public class UserController extends BaseController implements UserControllerApi 
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FansService fansService;
 
     @Override
     public ResponseResult getAccountInfo(String userId) {
@@ -59,6 +63,8 @@ public class UserController extends BaseController implements UserControllerApi 
         AppUser user = getUser(userId);
         AppUserVo appUserVo = new AppUserVo();
         BeanUtils.copyProperties(user, appUserVo);
+        appUserVo.setFollowingCount(fansService.getFollowingCount(userId));
+        appUserVo.setFansCount(fansService.getFansCount(userId));
         return ResponseResult.ok(appUserVo);
     }
 

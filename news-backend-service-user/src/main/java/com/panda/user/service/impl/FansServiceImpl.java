@@ -64,4 +64,16 @@ public class FansServiceImpl extends BaseService implements FansService {
         redisAdaptor.decrement(REDIS_USER_FOLLOW_COUNTS_PREFIX + ":" + userId, 1);
         redisAdaptor.decrement(REDIS_WRITER_FANS_COUNTS_PREFIX + ":" + writerId, 1);
     }
+
+    @Override
+    public int getFollowingCount(String userId) {
+        String count = redisAdaptor.get(REDIS_USER_FOLLOW_COUNTS_PREFIX + ":" + userId);
+        return count == null ? 0 : Integer.valueOf(count);
+    }
+
+    @Override
+    public int getFansCount(String userId) {
+        String count = redisAdaptor.get(REDIS_WRITER_FANS_COUNTS_PREFIX + ":" + userId);
+        return count == null ? 0 : Integer.valueOf(count);
+    }
 }

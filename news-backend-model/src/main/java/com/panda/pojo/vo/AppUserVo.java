@@ -10,4 +10,6 @@ public class AppUserVo {
     private Integer activeStatus;
     private String nickname;
     private String face;
+    private int fansCount;
+    private int followingCount;
 }

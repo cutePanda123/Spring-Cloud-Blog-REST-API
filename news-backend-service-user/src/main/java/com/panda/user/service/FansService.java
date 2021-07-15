@@ -6,4 +6,8 @@ public interface FansService {
     public void follow(String writerId, String userId);
 
     public void unfollow(String writerId, String userId);
+
+    public int getFollowingCount(String userId);
+
+    public int getFansCount(String userId);
 }
