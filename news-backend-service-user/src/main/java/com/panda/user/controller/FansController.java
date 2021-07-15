@@ -5,9 +5,8 @@ import com.panda.api.controller.user.FansControllerApi;
 import com.panda.enums.Gender;
 import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
-import com.panda.pojo.vo.FansCountsVo;
+import com.panda.pojo.vo.FansGendersCountsVo;
 import com.panda.user.service.FansService;
-import com.sun.tools.javah.Gen;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,12 +43,17 @@ public class FansController extends BaseController implements FansControllerApi 
     }
 
     @Override
-    public ResponseResult listFansGenders(String writerId) {
+    public ResponseResult countFansGenders(String writerId) {
         Integer maleCount = fansService.getFansCountByGender(writerId, Gender.male);
         Integer femaleCount = fansService.getFansCountByGender(writerId, Gender.female);
-        FansCountsVo vo = new FansCountsVo();
+        FansGendersCountsVo vo = new FansGendersCountsVo();
         vo.setFemaleCount(femaleCount);
         vo.setMaleCount(maleCount);
         return ResponseResult.ok(vo);
+    }
+
+    @Override
+    public ResponseResult countFansRegions(String writerId) {
+        return ResponseResult.ok(fansService.getFansCountByRegion(writerId));
     }
 }

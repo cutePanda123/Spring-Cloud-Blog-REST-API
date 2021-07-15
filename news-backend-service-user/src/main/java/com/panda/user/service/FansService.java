@@ -1,7 +1,10 @@
 package com.panda.user.service;
 
 import com.panda.enums.Gender;
+import com.panda.pojo.vo.FansRegionsCountsVo;
 import com.panda.utils.PaginationResult;
+
+import java.util.List;
 
 public interface FansService {
     public boolean isFollowing(String writerId, String userId);
@@ -19,4 +22,6 @@ public interface FansService {
                                      Integer pageSize);
 
     public Integer getFansCountByGender(String writerId, Gender gender);
+
+    public List<FansRegionsCountsVo> getFansCountByRegion(String writerId);
 }
