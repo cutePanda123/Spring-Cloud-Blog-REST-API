@@ -1,5 +1,6 @@
 package com.panda.user.service;
 
+import com.panda.enums.Gender;
 import com.panda.utils.PaginationResult;
 
 public interface FansService {
@@ -16,4 +17,6 @@ public interface FansService {
     public PaginationResult listFans(String writerId,
                                      Integer page,
                                      Integer pageSize);
+
+    public Integer getFansCountByGender(String writerId, Gender gender);
 }

@@ -2,9 +2,12 @@ package com.panda.user.controller;
 
 import com.panda.api.controller.BaseController;
 import com.panda.api.controller.user.FansControllerApi;
+import com.panda.enums.Gender;
 import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
+import com.panda.pojo.vo.FansCountsVo;
 import com.panda.user.service.FansService;
+import com.sun.tools.javah.Gen;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,5 +41,15 @@ public class FansController extends BaseController implements FansControllerApi 
             return ResponseResult.errorCustom(ResponseStatusEnum.FAILED);
         }
         return ResponseResult.ok(fansService.listFans(writerId, page, pageSize));
+    }
+
+    @Override
+    public ResponseResult listFansGenders(String writerId) {
+        Integer maleCount = fansService.getFansCountByGender(writerId, Gender.male);
+        Integer femaleCount = fansService.getFansCountByGender(writerId, Gender.female);
+        FansCountsVo vo = new FansCountsVo();
+        vo.setFemaleCount(femaleCount);
+        vo.setMaleCount(maleCount);
+        return ResponseResult.ok(vo);
     }
 }

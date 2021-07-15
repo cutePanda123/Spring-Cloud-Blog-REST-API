@@ -56,4 +56,7 @@ public interface FansControllerApi {
             @RequestParam Integer page,
             @ApiParam(name = "pageSize", value = "size per page", required = false)
             @RequestParam Integer pageSize);
+
+    @PostMapping("/list/genders")
+    public ResponseResult listFansGenders(@RequestParam String writerId);
 }

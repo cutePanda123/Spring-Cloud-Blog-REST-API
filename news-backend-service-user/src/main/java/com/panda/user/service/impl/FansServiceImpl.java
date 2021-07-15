@@ -2,6 +2,7 @@ package com.panda.user.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.panda.api.service.BaseService;
+import com.panda.enums.Gender;
 import com.panda.pojo.AppUser;
 import com.panda.pojo.Fans;
 import com.panda.user.mapper.FansMapper;
@@ -94,5 +95,13 @@ public class FansServiceImpl extends BaseService implements FansService {
         PageHelper.startPage(page, pageSize);
         List<Fans> fansList = fansMapper.select(fans);
         return paginationResultBuilder(fansList, page);
+    }
+
+    @Override
+    public Integer getFansCountByGender(String writerId, Gender gender) {
+        Fans fans = new Fans();
+        fans.setWriterId(writerId);
+        fans.setSex(gender.type);
+        return fansMapper.selectCount(fans);
     }
 }
