@@ -1,5 +1,6 @@
 package com.panda.article.service;
 
+import com.panda.pojo.vo.ArticleDetailVo;
 import com.panda.pojo.vo.ArticleVo;
 import com.panda.utils.PaginationResult;
 
@@ -9,4 +10,6 @@ public interface ArticlePortalService {
     public PaginationResult listArticles(String keyword, Integer category, Integer page, Integer pageSize);
 
     public List<ArticleVo> listPopularArticles();
+
+    public ArticleDetailVo getArticle(String articleId);
 }

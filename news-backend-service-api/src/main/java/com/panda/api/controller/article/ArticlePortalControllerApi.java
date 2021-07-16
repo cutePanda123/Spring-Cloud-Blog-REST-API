@@ -18,4 +18,8 @@ public interface ArticlePortalControllerApi {
     @GetMapping("list/populars")
     @ApiOperation(value = "list popular articles", notes = "list popular articles", httpMethod = "GET")
     public ResponseResult listPopularArticles();
+
+    @GetMapping("get")
+    @ApiOperation(value = "get article", notes = "get article", httpMethod = "GET")
+    public ResponseResult getArticle(@RequestParam String articleId);
 }

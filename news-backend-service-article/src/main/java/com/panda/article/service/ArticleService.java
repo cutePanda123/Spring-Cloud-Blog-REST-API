@@ -2,6 +2,7 @@ package com.panda.article.service;
 
 import com.panda.pojo.Category;
 import com.panda.pojo.bo.CreateArticleBo;
+import com.panda.pojo.vo.ArticleDetailVo;
 import com.panda.utils.PaginationResult;
 
 import java.util.Date;

@@ -9,6 +9,7 @@ import com.panda.enums.YesNoType;
 import com.panda.json.result.ResponseResult;
 import com.panda.pojo.Article;
 import com.panda.pojo.vo.AppUserVo;
+import com.panda.pojo.vo.ArticleDetailVo;
 import com.panda.pojo.vo.ArticleVo;
 import com.panda.utils.JsonUtils;
 import com.panda.utils.PaginationResult;
@@ -54,22 +55,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         List<Article> articles = articleMapper.selectByExample(example);
         Set<String> publisherIds = new HashSet<>();
         articles.forEach(article -> publisherIds.add(article.getPublishUserId()));
-        RequestEntity<Void> requestEntity = null;
-        try {
-             requestEntity =
-                     RequestEntity.
-                             get(new URI(ArticlePortalServiceImpl.userServiceListUserApiUrl)).
-                             accept(MediaType.APPLICATION_JSON).
-                             header("userIds", JsonUtils.objectToJson(publisherIds)).build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        ResponseEntity<ResponseResult> responseEntity = restTemplate.exchange(requestEntity, ResponseResult.class);
-        List<AppUserVo> userVoList = new LinkedList<>();
-        if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            String users = JsonUtils.objectToJson(responseEntity.getBody().getData());
-            userVoList = JsonUtils.jsonToList(users, AppUserVo.class);
-        }
+        List<AppUserVo> userVoList = listPublishers(publisherIds);
 
         List<ArticleVo> articleVoList = new LinkedList<>();
         for (Article article : articles) {
@@ -96,6 +82,25 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         return articleVoList;
     }
 
+    @Override
+    public ArticleDetailVo getArticle(String articleId) {
+        Article article = new Article();
+        article.setId(articleId);
+        article.setIsDelete(YesNoType.no.type);
+        article.setIsAppoint(YesNoType.no.type);
+        article.setArticleStatus(ArticleReviewStatus.success.type);
+        Article result = articleMapper.selectOne(article);
+        ArticleDetailVo vo = new ArticleDetailVo();
+        BeanUtils.copyProperties(result, vo);
+        Set<String> idSet = new HashSet<>();
+        idSet.add(result.getPublishUserId());
+        List<AppUserVo> publisherList = listPublishers(idSet);
+        if (!publisherList.isEmpty()) {
+            vo.setPublishUserName(publisherList.get(0).getNickname());
+        }
+        return vo;
+    }
+
     private AppUserVo getArticlePublisher(String publisherId, List<AppUserVo> userVoList) {
         for (AppUserVo userVo : userVoList) {
             if (userVo.getId().equalsIgnoreCase(publisherId)) {
@@ -114,5 +119,25 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         criteria.andEqualTo("isDelete", YesNoType.no.type);
         criteria.andEqualTo("articleStatus", ArticleReviewStatus.success.type);
         return example;
+    }
+
+    private List<AppUserVo> listPublishers(Set<String> publisherIds) {
+        RequestEntity<Void> requestEntity = null;
+        try {
+            requestEntity =
+                    RequestEntity.
+                            get(new URI(ArticlePortalServiceImpl.userServiceListUserApiUrl)).
+                            accept(MediaType.APPLICATION_JSON).
+                            header("userIds", JsonUtils.objectToJson(publisherIds)).build();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        ResponseEntity<ResponseResult> responseEntity = restTemplate.exchange(requestEntity, ResponseResult.class);
+        List<AppUserVo> userVoList = new LinkedList<>();
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            String users = JsonUtils.objectToJson(responseEntity.getBody().getData());
+            userVoList = JsonUtils.jsonToList(users, AppUserVo.class);
+        }
+        return userVoList;
     }
 }

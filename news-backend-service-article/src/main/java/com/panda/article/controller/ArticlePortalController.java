@@ -5,12 +5,12 @@ import com.panda.api.controller.article.ArticlePortalControllerApi;
 import com.panda.article.service.ArticlePortalService;
 import com.panda.article.service.ArticleService;
 import com.panda.json.result.ResponseResult;
+import com.panda.pojo.vo.ArticleDetailVo;
 import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
@@ -37,5 +37,11 @@ public class ArticlePortalController extends BaseController implements ArticlePo
     @Override
     public ResponseResult listPopularArticles() {
         return ResponseResult.ok(articlePortalService.listPopularArticles());
+    }
+
+    @Override
+    public ResponseResult getArticle(String articleId) {
+        ArticleDetailVo vo = articlePortalService.getArticle(articleId);
+        return ResponseResult.ok(vo);
     }
 }
