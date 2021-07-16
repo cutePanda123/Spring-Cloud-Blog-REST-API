@@ -64,6 +64,9 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
             ArticleVo vo = new ArticleVo();
             BeanUtils.copyProperties(article, vo);
             vo.setPublisherVO(getArticlePublisher(article.getPublishUserId(), userVoList));
+            String readCount = getReadCount(article.getId());
+            Integer count = readCount == null ? 0 :  Integer.valueOf(readCount);
+            vo.setReadCount(count);
             articleVoList.add(vo);
         }
 
@@ -100,9 +103,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         if (!publisherList.isEmpty()) {
             vo.setPublishUserName(publisherList.get(0).getNickname());
         }
-        vo.setReadCount(redisAdaptor.get(
-                REDIS_ARTICLE_READ_COUNTS_PREFIX + ":" + articleId
-        ));
+        vo.setReadCount(getReadCount(articleId));
         return vo;
     }
 
@@ -152,5 +153,9 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
             userVoList = JsonUtils.jsonToList(users, AppUserVo.class);
         }
         return userVoList;
+    }
+
+    private String getReadCount(String articleId) {
+        return redisAdaptor.get(REDIS_ARTICLE_READ_COUNTS_PREFIX + ":" + articleId);
     }
 }

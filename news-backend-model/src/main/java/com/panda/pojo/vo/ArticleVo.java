@@ -15,13 +15,12 @@ public class ArticleVo {
     private Integer articleStatus;
     private String publishUserId;
     private Date publishTime;
-    private Integer readCounts;
+    private Integer readCount;
     private Integer commentCounts;
     private String mongoFileId;
     private Integer isDelete;
     private Date createTime;
     private Date updateTime;
     private String content;
-
     private AppUserVo publisherVO;
 }
