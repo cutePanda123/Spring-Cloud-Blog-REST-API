@@ -56,15 +56,21 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         PageHelper.startPage(page, pageSize);
         List<Article> articles = articleMapper.selectByExample(example);
         Set<String> publisherIds = new HashSet<>();
-        articles.forEach(article -> publisherIds.add(article.getPublishUserId()));
+        List<String> articleIds = new LinkedList<>();
+        articles.forEach(article -> {
+            publisherIds.add(article.getPublishUserId());
+            articleIds.add(REDIS_ARTICLE_READ_COUNTS_PREFIX + ":" + article.getId());
+        });
+        List<String> readCounts = redisAdaptor.mget(articleIds);
         List<AppUserVo> userVoList = listPublishers(publisherIds);
 
         List<ArticleVo> articleVoList = new LinkedList<>();
-        for (Article article : articles) {
+        for (int i = 0; i < articles.size(); ++i) {
+            Article article = articles.get(i);
             ArticleVo vo = new ArticleVo();
             BeanUtils.copyProperties(article, vo);
             vo.setPublisherVO(getArticlePublisher(article.getPublishUserId(), userVoList));
-            String readCount = getReadCount(article.getId());
+            String readCount = readCounts.get(i);
             Integer count = readCount == null ? 0 :  Integer.valueOf(readCount);
             vo.setReadCount(count);
             articleVoList.add(vo);
