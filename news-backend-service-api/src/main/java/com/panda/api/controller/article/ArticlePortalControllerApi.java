@@ -22,4 +22,11 @@ public interface ArticlePortalControllerApi {
     @GetMapping("get")
     @ApiOperation(value = "get article", notes = "get article", httpMethod = "GET")
     public ResponseResult getArticle(@RequestParam String articleId);
+
+    @PostMapping("readcount")
+    @ApiOperation(
+            value = "increment article read count",
+            notes = "increment article read count",
+            httpMethod = "POST")
+    public ResponseResult incrementReadCount(@RequestParam String articleId);
 }

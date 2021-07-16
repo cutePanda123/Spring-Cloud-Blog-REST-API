@@ -12,4 +12,6 @@ public interface ArticlePortalService {
     public List<ArticleVo> listPopularArticles();
 
     public ArticleDetailVo getArticle(String articleId);
+
+    public void incrementArticleReadCount(String articleId);
 }

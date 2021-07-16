@@ -13,8 +13,8 @@ import com.panda.pojo.vo.ArticleDetailVo;
 import com.panda.pojo.vo.ArticleVo;
 import com.panda.utils.JsonUtils;
 import com.panda.utils.PaginationResult;
+import com.panda.utils.RedisAdaptor;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +38,8 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
     private ArticleMapper articleMapper;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private RedisAdaptor redisAdaptor;
     private final static String userServiceListUserApiUrl =
             "http://user.news.com:8003/api/service-user/user/list";
 
@@ -98,7 +100,18 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         if (!publisherList.isEmpty()) {
             vo.setPublishUserName(publisherList.get(0).getNickname());
         }
+        vo.setReadCount(redisAdaptor.get(
+                REDIS_ARTICLE_READ_COUNTS_PREFIX + ":" + articleId
+        ));
         return vo;
+    }
+
+    @Override
+    public void incrementArticleReadCount(String articleId) {
+        redisAdaptor.increment(
+                REDIS_ARTICLE_READ_COUNTS_PREFIX + ":" + articleId,
+                1
+        );
     }
 
     private AppUserVo getArticlePublisher(String publisherId, List<AppUserVo> userVoList) {

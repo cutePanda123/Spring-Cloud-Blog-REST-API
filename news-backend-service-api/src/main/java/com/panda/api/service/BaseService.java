@@ -9,6 +9,7 @@ public class BaseService {
     protected static final String REDIS_ALL_CATEGORY_KEY = "redis_all_category";
     protected static final String REDIS_WRITER_FANS_COUNTS_PREFIX = "redis_fans_counts";
     protected static final String REDIS_USER_FOLLOW_COUNTS_PREFIX = "redis_user_follow_counts";
+    protected static final String REDIS_ARTICLE_READ_COUNTS_PREFIX = "redis_article_read_counts";
     protected static final Integer DEFAULT_START_PAGE = 1;
     protected static final Integer DEFAULT_PAGE_SIZE = 10;
     protected PaginationResult paginationResultBuilder(List<?> list, Integer page) {
