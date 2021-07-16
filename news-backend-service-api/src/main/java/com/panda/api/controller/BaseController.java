@@ -24,6 +24,7 @@ public class BaseController {
     protected static final String REDIS_USER_INFO_PREFIX = "redis_user_info";
     protected static final String REDIS_ADMIN_TOKEN_PREFIX = "redis_admin_token";
     protected static final String REDIS_ALL_CATEGORY_KEY = "redis_all_category";
+    protected static final String REDIS_ARTICLE_ALREADY_READ_PREFIX = "redis_article_already_read";
     protected static final Integer COOKIE_DURATION = 30 * 24 * 60 * 60;
     protected static final Integer EXPIRED_COOKIE_DURATION = 0;
     protected static final Integer DEFAULT_START_PAGE = 1;

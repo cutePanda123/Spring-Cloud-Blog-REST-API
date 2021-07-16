@@ -31,6 +31,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
         return new AdminTokenInterceptor();
     }
 
+    @Bean
+    public ArticleReadInterceptor articleReadInterceptor() {
+        return new ArticleReadInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(passportInterceptor())
@@ -52,5 +57,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 //                .addPathPatterns("/api/service-admin/relatedLinkMng/listRelatedLinks");
 //                .addPathPatterns("/api/service-admin/relatedLinkMng/delete");
         //registry.addInterceptor(adminAuthenticationInterceptor());
+        registry.addInterceptor(articleReadInterceptor())
+                .addPathPatterns("/api/service-article/article/portal/readcount");
     }
 }

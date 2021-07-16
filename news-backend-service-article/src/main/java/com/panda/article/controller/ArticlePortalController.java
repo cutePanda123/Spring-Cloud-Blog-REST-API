@@ -6,11 +6,14 @@ import com.panda.article.service.ArticlePortalService;
 import com.panda.article.service.ArticleService;
 import com.panda.json.result.ResponseResult;
 import com.panda.pojo.vo.ArticleDetailVo;
+import com.panda.utils.IPUtils;
 import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -46,7 +49,9 @@ public class ArticlePortalController extends BaseController implements ArticlePo
     }
 
     @Override
-    public ResponseResult incrementReadCount(String articleId) {
+    public ResponseResult incrementReadCount(String articleId, HttpServletRequest request) {
+        String ip = IPUtils.getRequestIp(request);
+        redisAdaptor.setnx(REDIS_ARTICLE_ALREADY_READ_PREFIX + ":" + articleId + ":" + ip, ip);
         articlePortalService.incrementArticleReadCount(articleId);
         return ResponseResult.ok();
     }

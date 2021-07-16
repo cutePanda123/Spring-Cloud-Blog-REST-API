@@ -5,6 +5,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Api(value = "portal article controller", tags = {"portal article controller"})
 @RequestMapping("/api/service-article/article/portal")
 public interface ArticlePortalControllerApi {
@@ -28,5 +30,7 @@ public interface ArticlePortalControllerApi {
             value = "increment article read count",
             notes = "increment article read count",
             httpMethod = "POST")
-    public ResponseResult incrementReadCount(@RequestParam String articleId);
+    public ResponseResult incrementReadCount(
+            @RequestParam String articleId,
+            HttpServletRequest request);
 }
