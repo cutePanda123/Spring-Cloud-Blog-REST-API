@@ -5,6 +5,7 @@ import com.panda.pojo.bo.CommentReplyBo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,4 +18,8 @@ public interface CommentControllerApi {
     @PostMapping("/create")
     @ApiOperation(value = "create comment", notes = "create comment", httpMethod = "POST")
     public ResponseResult createComment(@RequestBody @Valid CommentReplyBo bo, BindingResult result);
+
+    @GetMapping("/count")
+    @ApiOperation(value = "get comment count", notes = "get comment count", httpMethod = "GET")
+    public ResponseResult getCommentCount(String articleId);
 }

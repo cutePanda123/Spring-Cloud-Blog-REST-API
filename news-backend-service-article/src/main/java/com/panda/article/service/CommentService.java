@@ -5,4 +5,6 @@ public interface CommentService {
                               String parentCommentId,
                               String content,
                               String userId);
+
+    public int getCommentCount(String articleId);
 }

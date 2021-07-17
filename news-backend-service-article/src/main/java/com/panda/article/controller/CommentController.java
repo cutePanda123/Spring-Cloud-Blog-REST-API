@@ -28,4 +28,9 @@ public class CommentController extends BaseController implements CommentControll
         commentService.createComment(bo.getArticleId(), bo.getParentId(), bo.getContent(), bo.getUserId());
         return ResponseResult.ok();
     }
+
+    @Override
+    public ResponseResult getCommentCount(String articleId) {
+        return ResponseResult.ok(commentService.getCommentCount(articleId));
+    }
 }

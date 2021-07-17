@@ -60,6 +60,14 @@ public class CommentServiceImpl extends BaseService implements CommentService {
         comments.setContent(content);
         comments.setCreateTime(new Date());
         commentsMapper.insert(comments);
+
+        redisAdaptor.increment(REDIS_COMMENT_COUNTS_PREFIX + ":" + articleId, 1);
+    }
+
+    @Override
+    public int getCommentCount(String articleId) {
+        String count = redisAdaptor.get(REDIS_COMMENT_COUNTS_PREFIX + ":" + articleId);
+        return count == null ? 0 : Integer.valueOf(count);
     }
 }
 
