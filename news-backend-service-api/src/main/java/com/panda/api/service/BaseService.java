@@ -1,9 +1,23 @@
 package com.panda.api.service;
 
 import com.github.pagehelper.PageInfo;
+import com.panda.json.result.ResponseResult;
+import com.panda.pojo.vo.AppUserVo;
+import com.panda.utils.JsonUtils;
 import com.panda.utils.PaginationResult;
+import com.panda.utils.RedisAdaptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class BaseService {
     protected static final String REDIS_ALL_CATEGORY_KEY = "redis_all_category";
@@ -12,6 +26,16 @@ public class BaseService {
     protected static final String REDIS_ARTICLE_READ_COUNTS_PREFIX = "redis_article_read_counts";
     protected static final Integer DEFAULT_START_PAGE = 1;
     protected static final Integer DEFAULT_PAGE_SIZE = 10;
+    private final static String userServiceListUserApiUrl =
+            "http://user.news.com:8003/api/service-user/user/list";
+
+
+    @Autowired
+    private RedisAdaptor redisAdaptor;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
     protected PaginationResult paginationResultBuilder(List<?> list, Integer page) {
         PageInfo<?> pageInfo = new PageInfo<>(list);
         PaginationResult result = new PaginationResult();
@@ -20,5 +44,25 @@ public class BaseService {
         result.setTotal(pageInfo.getPages());
         result.setRecords(pageInfo.getTotal());
         return  result;
+    }
+
+    protected List<AppUserVo> listPublishers(Set<String> publisherIds) {
+        RequestEntity<Void> requestEntity = null;
+        try {
+            requestEntity =
+                    RequestEntity.
+                            get(new URI(userServiceListUserApiUrl)).
+                            accept(MediaType.APPLICATION_JSON).
+                            header("userIds", JsonUtils.objectToJson(publisherIds)).build();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        ResponseEntity<ResponseResult> responseEntity = restTemplate.exchange(requestEntity, ResponseResult.class);
+        List<AppUserVo> userVoList = new LinkedList<>();
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            String users = JsonUtils.objectToJson(responseEntity.getBody().getData());
+            userVoList = JsonUtils.jsonToList(users, AppUserVo.class);
+        }
+        return userVoList;
     }
 }
