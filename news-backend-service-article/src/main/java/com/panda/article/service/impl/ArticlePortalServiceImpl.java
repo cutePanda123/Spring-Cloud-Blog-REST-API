@@ -100,6 +100,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
             vo.setPublishUserName(publisherList.get(0).getNickname());
         }
         vo.setReadCount(getReadCount(articleId));
+        vo.setCover(result.getArticleCover());
         return vo;
     }
 
