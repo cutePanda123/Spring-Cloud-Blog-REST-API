@@ -33,4 +33,9 @@ public class CommentController extends BaseController implements CommentControll
     public ResponseResult getCommentCount(String articleId) {
         return ResponseResult.ok(commentService.getCommentCount(articleId));
     }
+
+    @Override
+    public ResponseResult listComments(String articleId, Integer page, Integer pageSize) {
+        return ResponseResult.ok(commentService.listComments(articleId, page, pageSize));
+    }
 }
