@@ -48,6 +48,7 @@ public class CommentController extends BaseController implements CommentControll
 
     @Override
     public ResponseResult deleteComment(String writerId, String commentId) {
-        return null;
+        commentService.deleteComment(writerId, commentId);
+        return ResponseResult.ok();
     }
 }

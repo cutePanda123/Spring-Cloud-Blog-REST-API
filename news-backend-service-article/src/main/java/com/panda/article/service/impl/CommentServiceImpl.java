@@ -121,7 +121,11 @@ public class CommentServiceImpl extends BaseService implements CommentService {
 
     @Override
     public void deleteComment(String writerId, String commentId) {
-
+        Example example = new Example(Comments.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("writerId", writerId);
+        criteria.andEqualTo("id", commentId);
+        commentsMapper.deleteByExample(example);
     }
 }
 

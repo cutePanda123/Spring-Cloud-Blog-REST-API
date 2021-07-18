@@ -34,7 +34,7 @@ public interface CommentControllerApi {
             @RequestParam Integer page,
             @RequestParam Integer pageSize);
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     @ApiOperation(value = "delete a comment", notes = "delete a comment", httpMethod = "POST")
     public ResponseResult deleteComment(
             @RequestParam String writerId,
