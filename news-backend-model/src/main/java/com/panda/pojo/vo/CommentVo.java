@@ -15,4 +15,5 @@ public class CommentVo {
     private Date createTime;
     private String quoteUserNickname;
     private String quoteContent;
+    private String commentUserFace;
 }

@@ -12,6 +12,7 @@
             c.article_id as articleId,
             c.content as content,
             c.create_time as createTime,
+            c.comment_user_face as commentUserFace,
             f.comment_user_nickname as quoteUserNickname,
             f.content as quoteContent
         FROM
