@@ -5,6 +5,7 @@ import com.panda.api.controller.article.CommentControllerApi;
 import com.panda.article.service.CommentService;
 import com.panda.json.result.ResponseResult;
 import com.panda.pojo.bo.CommentReplyBo;
+import com.panda.utils.PaginationResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -37,5 +38,16 @@ public class CommentController extends BaseController implements CommentControll
     @Override
     public ResponseResult listComments(String articleId, Integer page, Integer pageSize) {
         return ResponseResult.ok(commentService.listComments(articleId, page, pageSize));
+    }
+
+    @Override
+    public ResponseResult listCommentsForWriter(String writerId, Integer page, Integer pageSize) {
+        PaginationResult result = commentService.listCommentsForWriter(writerId, page, pageSize);
+        return ResponseResult.ok(result);
+    }
+
+    @Override
+    public ResponseResult deleteComment(String writerId, String commentId) {
+        return null;
     }
 }

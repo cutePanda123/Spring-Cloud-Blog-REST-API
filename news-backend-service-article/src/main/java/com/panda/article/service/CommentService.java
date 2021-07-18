@@ -11,4 +11,8 @@ public interface CommentService {
     public int getCommentCount(String articleId);
 
     public PaginationResult listComments(String articleId, Integer page, Integer pageSize);
+
+    public PaginationResult listCommentsForWriter(String writerId, Integer page, Integer pageSize);
+
+    public void deleteComment(String writerId, String commentId);
 }

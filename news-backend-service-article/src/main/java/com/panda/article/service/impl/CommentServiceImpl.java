@@ -17,6 +17,7 @@ import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
 
@@ -87,6 +88,40 @@ public class CommentServiceImpl extends BaseService implements CommentService {
         PageHelper.startPage(page, pageSize);
         List<CommentVo> vos = commentsMapperCustom.listComments(map);
         return paginationResultBuilder(vos, page);
+    }
+
+    @Override
+    public PaginationResult listCommentsForWriter(String writerId, Integer page, Integer pageSize) {
+        if (page == null) {
+            page = DEFAULT_START_PAGE;
+        }
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        Example example = new Example(Comments.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("writerId", writerId);
+        example.orderBy("createTime");
+        PageHelper.startPage(page, pageSize);
+        List<Comments> commentsList = commentsMapper.selectByExample(example);
+        List<CommentVo> vos = new ArrayList<>();
+        for (Comments comments : commentsList) {
+            CommentVo vo = new CommentVo();
+            vo.setCommentId(comments.getId());
+            vo.setArticleId(comments.getArticleId());
+            vo.setCommentUserNickName(comments.getCommentUserNickname());
+            vo.setParentId(comments.getFatherId());
+            vo.setContent(comments.getContent());
+            vo.setCreateTime(comments.getCreateTime());
+            vo.setCommentUserId(comments.getCommentUserId());
+            vos.add(vo);
+        }
+        return paginationResultBuilder(vos, page);
+    }
+
+    @Override
+    public void deleteComment(String writerId, String commentId) {
+
     }
 }
 

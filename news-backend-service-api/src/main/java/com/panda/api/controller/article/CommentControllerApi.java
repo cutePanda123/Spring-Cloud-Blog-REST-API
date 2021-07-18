@@ -26,4 +26,18 @@ public interface CommentControllerApi {
             @RequestParam String articleId,
             @RequestParam Integer page,
             @RequestParam Integer pageSize);
+
+    @PostMapping("/list")
+    @ApiOperation(value = "list comments with writer id", notes = "list comments with writer id", httpMethod = "POST")
+    public ResponseResult listCommentsForWriter(
+            @RequestParam String writerId,
+            @RequestParam Integer page,
+            @RequestParam Integer pageSize);
+
+    @DeleteMapping("/delete")
+    @ApiOperation(value = "delete a comment", notes = "delete a comment", httpMethod = "POST")
+    public ResponseResult deleteComment(
+            @RequestParam String writerId,
+            @RequestParam String commentId
+    );
 }

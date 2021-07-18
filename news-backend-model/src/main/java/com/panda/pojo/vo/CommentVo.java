@@ -2,6 +2,8 @@ package com.panda.pojo.vo;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class CommentVo {
     private String commentId;
@@ -10,7 +12,7 @@ public class CommentVo {
     private String commentUserId;
     private String commentUserNickName;
     private String content;
-    private String createTime;
+    private Date createTime;
     private String quoteUserNickname;
     private String quoteContent;
 }
