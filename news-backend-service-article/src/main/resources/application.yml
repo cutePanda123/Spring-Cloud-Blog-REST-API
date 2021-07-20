@@ -52,4 +52,8 @@ mapper:
 pagehelper:
     helperDialect: mysql
     supportMethodsArguments: true
+
+freemarker:
+    html:
+        target: /workspace/freemarker_html
         
