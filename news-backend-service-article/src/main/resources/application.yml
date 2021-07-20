@@ -55,5 +55,5 @@ pagehelper:
 
 freemarker:
     html:
-        target: /workspace/freemarker_html
+        article: /workspace/freemarker_html
         
