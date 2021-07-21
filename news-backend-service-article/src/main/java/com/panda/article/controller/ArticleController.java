@@ -6,23 +6,33 @@ import com.panda.article.service.ArticleService;
 import com.panda.enums.ArticleCoverType;
 import com.panda.enums.ArticleReviewStatus;
 import com.panda.enums.YesNoType;
+import com.panda.exception.EncapsulatedException;
 import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.Category;
 import com.panda.pojo.bo.CreateArticleBo;
+import com.panda.pojo.vo.ArticleDetailVo;
 import com.panda.utils.JsonUtils;
 import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -32,6 +42,17 @@ public class ArticleController extends BaseController implements ArticleControll
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("${freemarker.html.article}")
+    private String freemarkerGeneratedFileDirectory;
+
+    private final static String articleServiceGetArticleDetailApiUrl =
+            "http://www.news.com:8007/api/service-article/article/portal/get?articleId=";
+
+    private final static String freemarkerArticleObjectName = "articleDetail";
 
     @Transactional
     @Override
@@ -100,6 +121,13 @@ public class ArticleController extends BaseController implements ArticleControll
             return ResponseResult.errorCustom(ResponseStatusEnum.ARTICLE_REVIEW_ERROR);
         }
         articleService.updateArticleReviewStatus(articleId, reviewStatus);
+        if (reviewStatus == ArticleReviewStatus.success.type) {
+            try {
+                generateHtml(articleId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return ResponseResult.ok();
     }
 
@@ -115,5 +143,44 @@ public class ArticleController extends BaseController implements ArticleControll
     public ResponseResult withdrawArticle(String userId, String articleId) {
         articleService.withdrawArticle(userId, articleId);
         return ResponseResult.ok();
+    }
+
+    private void generateHtml(String articleId) throws Exception {
+        Configuration configuration = new Configuration(Configuration.getVersion());
+        String classpath = this.getClass().getResource(File.separator).getPath();
+        configuration.setDirectoryForTemplateLoading(new File(classpath + "templates"));
+        Template template = configuration.getTemplate("detail.ftl", "utf-8");
+        ArticleDetailVo articleDetailVo = getArticleDetail(articleId);
+        Map<String, Object> map = new HashMap<>();
+        map.put(freemarkerArticleObjectName, articleDetailVo);
+
+        File generatedFileDirectory = new File(freemarkerGeneratedFileDirectory);
+        if (!generatedFileDirectory.exists()) {
+            generatedFileDirectory.mkdirs();
+        }
+
+        String generatedFilePath = generatedFileDirectory + File.separator + articleDetailVo.getId() + ".html";
+        Writer writer = new FileWriter(generatedFilePath);
+        template.process(map, writer);
+        writer.close();
+    }
+
+    private ArticleDetailVo getArticleDetail(String articleId) {
+        ResponseEntity<ResponseResult> responseEntity = null;
+        try {
+            responseEntity = restTemplate.getForEntity(
+                    articleServiceGetArticleDetailApiUrl + articleId,
+                    ResponseResult.class
+            );
+        }catch (Exception e) {
+            EncapsulatedException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
+        }
+
+        ArticleDetailVo vo = null;
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            String users = JsonUtils.objectToJson(responseEntity.getBody().getData());
+            vo = JsonUtils.jsonToPojo(users, ArticleDetailVo.class);
+        }
+        return vo;
     }
 }

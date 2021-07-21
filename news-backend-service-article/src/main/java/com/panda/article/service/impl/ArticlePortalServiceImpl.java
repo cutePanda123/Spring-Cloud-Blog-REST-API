@@ -89,7 +89,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         article.setId(articleId);
         article.setIsDelete(YesNoType.no.type);
         article.setIsAppoint(YesNoType.no.type);
-        article.setArticleStatus(ArticleReviewStatus.success.type);
+        //article.setArticleStatus(ArticleReviewStatus.success.type);
         Article result = articleMapper.selectOne(article);
         ArticleDetailVo vo = new ArticleDetailVo();
         BeanUtils.copyProperties(result, vo);
@@ -99,7 +99,8 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         if (!publisherList.isEmpty()) {
             vo.setPublishUserName(publisherList.get(0).getNickname());
         }
-        vo.setReadCount(getReadCount(articleId));
+        String count = getReadCount(articleId);
+        vo.setReadCount(count == null ? 0 : Integer.valueOf(count));
         vo.setCover(result.getArticleCover());
         return vo;
     }

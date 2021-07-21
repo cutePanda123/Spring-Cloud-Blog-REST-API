@@ -1,5 +1,6 @@
 package com.panda.pojo.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,8 +13,9 @@ public class ArticleDetailVo {
     private Integer categoryId;
     private String categoryName;
     private String publishUserId;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
     private String content;
     private String publishUserName;
-    private String readCount;
+    private Integer readCount;
 }
