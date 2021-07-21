@@ -30,12 +30,11 @@
 
 <body>
     <div id="detailContainer">
-        <!-- 顶部导航头 header -->
         <div class="white-header">
             <div class="white-bar">
                 <div class="left-part">
                     <div class="logo-wrapper" @click="goIndex()">
-                        <img src="./img/imooc-news-logo.png" class="big-logo"/>
+                        <img src="./img/news-logo.png" class="big-logo"/>
                     </div>
 
                     <div class="menus">
@@ -45,13 +44,12 @@
 							<a href="javascript:void(0);" class="white-header-left" style="text-decoration:none;" v-bind:class="{'menu-selected': (cat.id==selectedCatId)}" @click="queryByCategory(cat.id)">{{cat.name}}</a>
 						</div>
 						<div class="single-default">
-                            <a href="https://class.imooc.com/sale/javaarchitect" target="_blank" class="white-header-left">架构师</a>
+                            <a href="https://class.panda.com/sale/javaarchitect" target="_blank" class="white-header-left">架构师</a>
                         </div>
 					</div>
                 </div>
 
                 <div class="right-part">
-					<!-- 如果登录则不显示 -->
 					<block v-if="userInfo == null">
 						<a href="javascript:(0);" @click="doLogin()" class="white-header-right-start">登录 | 注册</a>
 					</block>
@@ -89,8 +87,8 @@
                         ${articleDetail.publishUserName}
                     </div>
 
-                    <div class="imooc-words">
-                        <span class="imooc-num">慕课媒体号</span>
+                    <div class="panda-words">
+                        <span class="panda-num">媒体号</span>
                     </div>
 
                     <div class="share-title">
@@ -133,7 +131,7 @@
                         </div>
 
                         <div class="declare">
-                            免责声明：本平台所有内容仅供测试，且文章来自互联网，不代表慕课网的观点和立场，如有不妥，请联系后删除。
+                            免责声明：本平台所有内容仅供测试，且文章来自互联网，不代表我网的观点和立场，如有不妥，请联系后删除。
                         </div>
                     </div>
 
@@ -335,7 +333,7 @@
                 },
                 // 跳转作家页面
                 showWriter(writerId) {
-                    window.open("writer.html?writerId=" + writerId);
+                    window.open("../writer.html?writerId=" + writerId);
                 },
                 // 查询文章详情
                 getArticleDetail(articleId) {
