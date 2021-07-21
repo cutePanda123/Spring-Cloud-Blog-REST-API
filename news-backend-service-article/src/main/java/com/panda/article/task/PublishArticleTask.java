@@ -16,7 +16,7 @@ public class PublishArticleTask {
 
     @Scheduled(cron = "0/3 * * * * ?")
     private void publishArticles() {
-        System.out.println("execute scheduled task to publish articles: " + LocalDateTime.now());
-        articleService.updateScheduledArticleToAdhoc();
+        //System.out.println("execute scheduled task to publish articles: " + LocalDateTime.now());
+        //articleService.updateScheduledArticleToAdhoc();
     }
 }
