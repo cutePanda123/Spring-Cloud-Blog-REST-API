@@ -55,4 +55,10 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         articlePortalService.incrementArticleReadCount(articleId);
         return ResponseResult.ok();
     }
+
+    @Override
+    public ResponseResult getArticleReadCount(String articleId) {
+        Integer count = articlePortalService.getArticleReadCount(articleId);
+        return ResponseResult.ok(count);
+    }
 }

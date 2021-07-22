@@ -33,4 +33,8 @@ public interface ArticlePortalControllerApi {
     public ResponseResult incrementReadCount(
             @RequestParam String articleId,
             HttpServletRequest request);
+
+    @GetMapping("articlereadcount")
+    @ApiOperation(value = "get article read count", notes = "get article read count", httpMethod = "GET")
+    public ResponseResult getArticleReadCount(@RequestParam String articleId);
 }

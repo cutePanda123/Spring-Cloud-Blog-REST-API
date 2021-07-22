@@ -14,4 +14,6 @@ public interface ArticlePortalService {
     public ArticleDetailVo getArticle(String articleId);
 
     public void incrementArticleReadCount(String articleId);
+
+    public Integer getArticleReadCount(String articleId);
 }

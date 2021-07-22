@@ -113,6 +113,12 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         );
     }
 
+    @Override
+    public Integer getArticleReadCount(String articleId) {
+        String count = getReadCount(articleId);
+        return count == null ? 0 : Integer.valueOf(count);
+    }
+
     private AppUserVo getArticlePublisher(String publisherId, List<AppUserVo> userVoList) {
         for (AppUserVo userVo : userVoList) {
             if (userVo.getId().equalsIgnoreCase(publisherId)) {
