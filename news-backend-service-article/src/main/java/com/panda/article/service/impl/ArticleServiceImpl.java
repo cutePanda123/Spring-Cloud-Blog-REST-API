@@ -135,6 +135,16 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         }
     }
 
+    @Override
+    public void saveArticleGridFsFileId(String articleId, String fileId) {
+        Article article = new Article();
+        article.setId(articleId);
+        article.setMongoFileId(fileId);
+        if (articleMapper.updateByPrimaryKeySelective(article) != 1) {
+            EncapsulatedException.display(ResponseStatusEnum.ARTICLE_MONGO_FILE_ID_UPDATE_ERROR);
+        }
+    }
+
     @Transactional
     @Override
     public void updateArticleReviewStatus(String articleId, Integer status) {

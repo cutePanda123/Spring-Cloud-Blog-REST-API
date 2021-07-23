@@ -1,5 +1,6 @@
 package com.panda.article.controller;
 
+import com.mongodb.client.gridfs.GridFSBucket;
 import com.panda.api.controller.BaseController;
 import com.panda.api.controller.article.ArticleControllerApi;
 import com.panda.article.service.ArticleService;
@@ -16,12 +17,15 @@ import com.panda.utils.JsonUtils;
 import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 import freemarker.template.Configuration;
@@ -31,6 +35,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.Writer;
 import java.util.*;
 
@@ -48,6 +53,9 @@ public class ArticleController extends BaseController implements ArticleControll
 
     @Value("${freemarker.html.article}")
     private String freemarkerGeneratedFileDirectory;
+
+    @Autowired
+    private GridFSBucket gridFSBucket;
 
     private final static String articleServiceGetArticleDetailApiUrl =
             "http://www.news.com:8007/api/service-article/article/portal/get?articleId=";
@@ -123,7 +131,9 @@ public class ArticleController extends BaseController implements ArticleControll
         articleService.updateArticleReviewStatus(articleId, reviewStatus);
         if (reviewStatus == ArticleReviewStatus.success.type) {
             try {
-                generateHtml(articleId);
+                String content = generateHtml(articleId);
+                String fileId = uploadToGridFs(articleId + ".html", content);
+                articleService.saveArticleGridFsFileId(articleId, fileId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -145,7 +155,7 @@ public class ArticleController extends BaseController implements ArticleControll
         return ResponseResult.ok();
     }
 
-    private void generateHtml(String articleId) throws Exception {
+    private String generateHtml(String articleId) throws Exception {
         Configuration configuration = new Configuration(Configuration.getVersion());
         String classpath = this.getClass().getResource(File.separator).getPath();
         configuration.setDirectoryForTemplateLoading(new File(classpath + "templates"));
@@ -154,15 +164,12 @@ public class ArticleController extends BaseController implements ArticleControll
         Map<String, Object> map = new HashMap<>();
         map.put(freemarkerArticleObjectName, articleDetailVo);
 
-        File generatedFileDirectory = new File(freemarkerGeneratedFileDirectory);
-        if (!generatedFileDirectory.exists()) {
-            generatedFileDirectory.mkdirs();
-        }
+        return FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
+    }
 
-        String generatedFilePath = generatedFileDirectory + File.separator + articleDetailVo.getId() + ".html";
-        Writer writer = new FileWriter(generatedFilePath);
-        template.process(map, writer);
-        writer.close();
+    private String uploadToGridFs(String fileName, String content) {
+        InputStream inputStream = IOUtils.toInputStream(content);
+        return gridFSBucket.uploadFromStream(fileName, inputStream).toString();
     }
 
     private ArticleDetailVo getArticleDetail(String articleId) {

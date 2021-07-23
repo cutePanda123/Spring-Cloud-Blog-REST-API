@@ -55,6 +55,7 @@ public enum ResponseStatusEnum {
     ARTICLE_WITHDRAW_ERROR(585, false, "Failed to retract the article！"),
     ARTICLE_REVIEW_ERROR(585, false, "Article review error！"),
     ARTICLE_ALREADY_READ_ERROR(586, false, "Repeat article reading！"),
+    ARTICLE_MONGO_FILE_ID_UPDATE_ERROR(587, false, "Article mongodb id update failed！"),
 
     // Face verification exception
     FACE_VERIFY_TYPE_ERROR(600, false, "The face verification type is incorrect！"),

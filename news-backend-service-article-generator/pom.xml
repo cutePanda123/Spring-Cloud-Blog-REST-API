@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>news-backend-service-fs</artifactId>
+    <artifactId>news-backend-service-article-generator</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -22,11 +22,9 @@
             <artifactId>news-backend-service-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
         <dependency>
-            <groupId>com.github.tobato</groupId>
-            <artifactId>fastdfs-client</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
     </dependencies>
-
 </project>

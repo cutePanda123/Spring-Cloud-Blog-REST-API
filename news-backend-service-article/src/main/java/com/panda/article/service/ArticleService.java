@@ -20,4 +20,6 @@ public interface ArticleService {
     public void deleteArticle(String userId, String articleId);
 
     public void withdrawArticle(String userId, String articleId);
+
+    public void saveArticleGridFsFileId(String articleId, String fileId);
 }
