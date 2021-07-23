@@ -1,0 +1,10 @@
+######################
+# project config
+######################
+spring:
+    profiles:
+        active: dev
+    data:
+        mongodb:
+            uri: mongodb://127.0.0.1:27017
+            database: news

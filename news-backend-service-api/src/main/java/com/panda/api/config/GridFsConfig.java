@@ -1,4 +1,4 @@
-package com.panda.fs.config;
+package com.panda.api.config;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
