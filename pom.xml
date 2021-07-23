@@ -16,6 +16,7 @@
         <module>news-backend-service-fs</module>
         <module>news-backend-service-admin</module>
         <module>news-backend-service-article</module>
+        <module>news-backend-service-article-generator</module>
     </modules>
 
     <packaging>pom</packaging>

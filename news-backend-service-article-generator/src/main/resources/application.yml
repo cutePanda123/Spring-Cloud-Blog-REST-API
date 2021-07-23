@@ -1,0 +1,33 @@
+##################
+# Article html generate service
+#################
+
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        max-swallow-size: -1
+
+######################
+# project config
+######################
+spring:
+    profiles:
+        active: dev
+    application:
+        name: service-article-generator
+    jackson:
+        date-format: yyy-MM-dd HH:mm:ss
+        time-zone: GMT-8
+    data:
+        mongodb:
+            uri: mongodb://127.0.0.1:27017
+            database: news
+    freemarker:
+        charset: UTF-8
+        content-type: text/html
+        suffix: .ftl
+        template-loader-path: classpath:/templates/
+freemarker:
+    html:
+        article: /usr/local/tomcat0/webapps/news-frontend/portal
+        

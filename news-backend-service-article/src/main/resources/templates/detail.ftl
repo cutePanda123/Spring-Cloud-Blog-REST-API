@@ -337,7 +337,7 @@
 
                 getArticleReadCount(articleId) {
                     var me = this;
-                    
+
                     var articleServerUrl = app.articleServerUrl;
                     axios.defaults.withCredentials = true;
                     axios.get(articleServerUrl + "/article/portal/articlereadcount?articleId=" + articleId)
