@@ -10,3 +10,7 @@ spring:
 
 website:
     domain-name: news.com
+
+freemarker:
+  html:
+    article: /usr/local/tomcat0/webapps/news-frontend/portal
