@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +52,8 @@ public class ArticleController extends BaseController implements ArticleControll
 
     private final static String articleServiceGetArticleDetailApiUrl =
             "http://www.news.com:8007/api/service-article/article/portal/get?articleId=";
+    private final static String uiServerDownloadGeneratedArticlePageApiUrl =
+            "http://static.news.com:8002/api/service-static/article/get?";
 
     private final static String freemarkerArticleObjectName = "articleDetail";
 
@@ -128,6 +129,7 @@ public class ArticleController extends BaseController implements ArticleControll
                 String content = generateHtml(articleId);
                 String fileId = uploadToGridFs(articleId + ".html", content);
                 articleService.saveArticleGridFsFileId(articleId, fileId);
+                noticeUiServerToPullGeneratedPage(articleId, fileId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -164,6 +166,21 @@ public class ArticleController extends BaseController implements ArticleControll
     private String uploadToGridFs(String fileName, String content) {
         InputStream inputStream = IOUtils.toInputStream(content);
         return gridFSBucket.uploadFromStream(fileName, inputStream).toString();
+    }
+
+    private void noticeUiServerToPullGeneratedPage(String articleId, String fileId) {
+        String url = uiServerDownloadGeneratedArticlePageApiUrl +
+                "?articleId=" + articleId + "&gridFsId=" + fileId;
+        ResponseEntity<Integer> responseEntity = null;
+        try {
+            responseEntity = restTemplate.getForEntity(url, Integer.class);
+        }catch (Exception e) {
+            EncapsulatedException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
+        }
+        int status = responseEntity.getBody();
+        if (status != HttpStatus.OK.value()) {
+            EncapsulatedException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
+        }
     }
 
     private ArticleDetailVo getArticleDetail(String articleId) {

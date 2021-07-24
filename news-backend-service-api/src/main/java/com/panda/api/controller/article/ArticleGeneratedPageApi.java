@@ -7,10 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Api(value = "generated article page controller", tags = {"generated article page controller"})
-@RequestMapping("/api/service-article/article/html")
+@Api(
+        value = "client controller to download article page from GridFs",
+        tags = {"client controller to download article page from GridFs"})
+@RequestMapping("/api/service-static/article")
 public interface ArticleGeneratedPageApi {
     @GetMapping("get")
-    @ApiOperation(value = "get generated page", notes = "get generated page", httpMethod = "GET")
-    public ResponseResult getArticlePage(@RequestParam String articleId, @RequestParam String gridFsId);
+    @ApiOperation(
+            value = "notice client server to download article page from GridFs",
+            notes = "notice client server to download article page from GridFs",
+            httpMethod = "GET")
+    public Integer downloadArticlePage(@RequestParam String articleId, @RequestParam String gridFsId);
 }
