@@ -51,9 +51,9 @@ public class ArticleController extends BaseController implements ArticleControll
     private GridFSBucket gridFSBucket;
 
     private final static String articleServiceGetArticleDetailApiUrl =
-            "http://www.news.com:8007/api/service-article/article/portal/get?articleId=";
+            "http://www.news.com:8007/api/service-article/article/portal/get";
     private final static String uiServerDownloadGeneratedArticlePageApiUrl =
-            "http://static.news.com:8002/api/service-static/article/get?";
+            "http://static.news.com:8002/api/service-static/article/get";
 
     private final static String freemarkerArticleObjectName = "articleDetail";
 
@@ -171,14 +171,14 @@ public class ArticleController extends BaseController implements ArticleControll
     private void noticeUiServerToPullGeneratedPage(String articleId, String fileId) {
         String url = uiServerDownloadGeneratedArticlePageApiUrl +
                 "?articleId=" + articleId + "&gridFsId=" + fileId;
-        ResponseEntity<Integer> responseEntity = null;
+        ResponseEntity<ResponseResult> responseEntity = null;
         try {
-            responseEntity = restTemplate.getForEntity(url, Integer.class);
+            responseEntity = restTemplate.getForEntity(url, ResponseResult.class);
         }catch (Exception e) {
             EncapsulatedException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
         }
-        int status = responseEntity.getBody();
-        if (status != HttpStatus.OK.value()) {
+        ResponseResult result = responseEntity.getBody();
+        if (result.getStatus() != HttpStatus.OK.value()) {
             EncapsulatedException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
         }
     }
@@ -187,7 +187,7 @@ public class ArticleController extends BaseController implements ArticleControll
         ResponseEntity<ResponseResult> responseEntity = null;
         try {
             responseEntity = restTemplate.getForEntity(
-                    articleServiceGetArticleDetailApiUrl + articleId,
+                    articleServiceGetArticleDetailApiUrl + "?articleId=" + articleId,
                     ResponseResult.class
             );
         }catch (Exception e) {

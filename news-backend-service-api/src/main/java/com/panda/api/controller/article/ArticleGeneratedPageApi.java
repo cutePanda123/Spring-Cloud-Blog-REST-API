@@ -17,5 +17,5 @@ public interface ArticleGeneratedPageApi {
             value = "notice client server to download article page from GridFs",
             notes = "notice client server to download article page from GridFs",
             httpMethod = "GET")
-    public Integer downloadArticlePage(@RequestParam String articleId, @RequestParam String gridFsId);
+    public ResponseResult downloadArticlePage(@RequestParam String articleId, @RequestParam String gridFsId);
 }

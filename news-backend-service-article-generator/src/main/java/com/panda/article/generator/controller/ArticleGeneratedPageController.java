@@ -3,6 +3,7 @@ package com.panda.article.generator.controller;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.panda.api.controller.article.ArticleGeneratedPageApi;
 import com.panda.exception.EncapsulatedException;
+import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -26,7 +27,7 @@ public class ArticleGeneratedPageController implements ArticleGeneratedPageApi {
     private String freemarkerGeneratedFileDirectory;
 
     @Override
-    public Integer downloadArticlePage(String articleId, String gridFsId) {
+    public ResponseResult downloadArticlePage(String articleId, String gridFsId) {
         String filePath = freemarkerGeneratedFileDirectory + File.separator + articleId + ".html";
         File file = new File(filePath);
         OutputStream outputStream = null;
@@ -36,6 +37,6 @@ public class ArticleGeneratedPageController implements ArticleGeneratedPageApi {
             EncapsulatedException.display(ResponseStatusEnum.FILE_CREATE_FAILD);
         }
         gridFSBucket.downloadToStream(new ObjectId(gridFsId), outputStream);
-        return HttpStatus.OK.value();
+        return ResponseResult.ok();
     }
 }
