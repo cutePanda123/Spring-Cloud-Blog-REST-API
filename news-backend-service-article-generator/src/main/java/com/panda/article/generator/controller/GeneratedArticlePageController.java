@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
@@ -19,7 +18,7 @@ import java.io.OutputStream;
 
 @Slf4j
 @RestController
-public class ArticleGeneratedPageController implements ArticleGeneratedPageApi {
+public class GeneratedArticlePageController implements ArticleGeneratedPageApi {
     @Autowired
     private GridFSBucket gridFSBucket;
 
