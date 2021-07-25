@@ -1,6 +1,7 @@
 package com.panda.article.controller;
 
 import com.mongodb.client.gridfs.GridFSBucket;
+import com.panda.api.config.RabbitMqConfig;
 import com.panda.api.controller.BaseController;
 import com.panda.api.controller.article.ArticleControllerApi;
 import com.panda.article.service.ArticleService;
@@ -19,6 +20,7 @@ import com.panda.utils.RedisAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +51,9 @@ public class ArticleController extends BaseController implements ArticleControll
 
     @Autowired
     private GridFSBucket gridFSBucket;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     private final static String articleServiceGetArticleDetailApiUrl =
             "http://www.news.com:8007/api/service-article/article/portal/get";
@@ -129,7 +134,7 @@ public class ArticleController extends BaseController implements ArticleControll
                 String content = generateHtml(articleId);
                 String fileId = uploadToGridFs(articleId + ".html", content);
                 articleService.saveArticleGridFsFileId(articleId, fileId);
-                noticeUiServerToPullGeneratedPage(articleId, fileId);
+                noticeUiServerToPullGeneratedPageV2(articleId, fileId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -168,7 +173,7 @@ public class ArticleController extends BaseController implements ArticleControll
         return gridFSBucket.uploadFromStream(fileName, inputStream).toString();
     }
 
-    private void noticeUiServerToPullGeneratedPage(String articleId, String fileId) {
+    private void noticeUiServerToPullGeneratedPageV1(String articleId, String fileId) {
         String url = uiServerDownloadGeneratedArticlePageApiUrl +
                 "?articleId=" + articleId + "&gridFsId=" + fileId;
         ResponseEntity<ResponseResult> responseEntity = null;
@@ -179,6 +184,18 @@ public class ArticleController extends BaseController implements ArticleControll
         }
         ResponseResult result = responseEntity.getBody();
         if (result.getStatus() != HttpStatus.OK.value()) {
+            EncapsulatedException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
+        }
+    }
+
+    private void noticeUiServerToPullGeneratedPageV2(String articleId, String fileId) {
+        try {
+            rabbitTemplate.convertAndSend(
+                    RabbitMqConfig.GENERATED_ARTICLE_EXCHANGE_NAME,
+                    RabbitMqConfig.GENERATED_ARTICLE_ROUTING_KEY,
+                    articleId + "," + fileId
+            );
+        }catch (Exception e) {
             EncapsulatedException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
         }
     }
