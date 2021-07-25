@@ -42,6 +42,12 @@ spring:
         content-type: text/html
         suffix: .ftl
         template-loader-path: classpath:/templates/
+    rabbitmq:
+        host: 127.0.0.1
+        port: 5672
+        username: admin
+        password: admin
+        virtual-host: news-dev
 mybatis:
     type-aliases-package: com.panda.pojo
     mapper-locations: classpath:mapper/*.xml

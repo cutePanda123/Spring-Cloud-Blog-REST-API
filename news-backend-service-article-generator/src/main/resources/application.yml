@@ -27,6 +27,12 @@ spring:
         content-type: text/html
         suffix: .ftl
         template-loader-path: classpath:/templates/
+    rabbitmq:
+        host: 127.0.0.1
+        port: 5672
+        username: admin
+        password: admin
+        virtual-host: news-dev
 freemarker:
     html:
         article: /usr/local/tomcat0/webapps/news-frontend/portal
