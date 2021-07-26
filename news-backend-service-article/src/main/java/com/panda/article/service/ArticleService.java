@@ -22,4 +22,6 @@ public interface ArticleService {
     public void withdrawArticle(String userId, String articleId);
 
     public void saveArticleGridFsFileId(String articleId, String fileId);
+
+    public void publishArticle(String articleId);
 }

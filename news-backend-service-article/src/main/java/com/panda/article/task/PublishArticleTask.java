@@ -8,8 +8,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
 
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
+// Implemented publish scheduled article with RabbitMq delayed message
+// and deprecated this scheduled task because it does entire table scanning
+// which leads to performance issue
 public class PublishArticleTask {
     @Autowired
     private ArticleService articleService;

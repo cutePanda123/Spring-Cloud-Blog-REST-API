@@ -1,6 +1,7 @@
 package com.panda.article.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.panda.api.config.RabbitDelayedMqConfig;
 import com.panda.api.service.BaseService;
 import com.panda.article.mapper.ArticleMapper;
 import com.panda.article.mapper.ArticleMapperCustom;
@@ -16,6 +17,11 @@ import com.panda.pojo.bo.CreateArticleBo;
 import com.panda.utils.PaginationResult;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +41,9 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 
     @Autowired
     Sid sid;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     private static final Integer GENERAL_REVIEWING_STATUS = 12; // it includes both automatic and manual reviewing
 
@@ -60,6 +69,33 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         int rowNum = articleMapper.insert(article);
         if (rowNum != 1) {
             EncapsulatedException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
+        }
+        if (article.getIsAppoint() == ArticlePublishType.scheduled.type) {
+            Date publishTime = bo.getPublishTime();
+            Date curTime = new Date();
+            int delayDuration = (int)(publishTime.getTime() - curTime.getTime());
+            delayDuration = 10 *1000;
+            MessagePostProcessor messagePostProcessor = new MessagePostProcessor() {
+                @Override
+                public Message postProcessMessage(Message message) throws AmqpException {
+                    message.getMessageProperties()
+                            .setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                    message.getMessageProperties()
+                            .setDelay(10 * 1000);
+                    return message;
+                }
+            };
+            try {
+                rabbitTemplate.convertAndSend(
+                        RabbitDelayedMqConfig.DELAYED_EXCHANGE_NAME,
+                        RabbitDelayedMqConfig.DELAYED_PUBLISH_ARTICLE_ROUTING_KEY,
+                        articleId,
+                        messagePostProcessor
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+                EncapsulatedException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
+            }
         }
     }
 
@@ -143,6 +179,14 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         if (articleMapper.updateByPrimaryKeySelective(article) != 1) {
             EncapsulatedException.display(ResponseStatusEnum.ARTICLE_MONGO_FILE_ID_UPDATE_ERROR);
         }
+    }
+
+    @Override
+    public void publishArticle(String articleId) {
+        Article article = new Article();
+        article.setId(articleId);
+        article.setIsAppoint(ArticlePublishType.adhoc.type);
+        articleMapper.updateByPrimaryKeySelective(article);
     }
 
     @Transactional
