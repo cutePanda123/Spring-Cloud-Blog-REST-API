@@ -1,4 +1,4 @@
-package com.panda.article.generator.controller;
+package com.panda.article.generator.eventlistener;
 
 import com.panda.api.config.RabbitMqConfig;
 import com.panda.article.generator.service.GeneratedArticleEventHandlerService;
