@@ -58,4 +58,13 @@ mapper:
 pagehelper:
     helperDialect: mysql
     supportMethodsArguments: true
+eureka:
+    server:
+        hostname: localhost
+        port: 7000
+    client:
+        register-with-eureka: true
+        fetch-registry: true
+        service-url:
+            defaultZone: http://${eureka.server.hostname}:${eureka.server.port}/eureka/
         
