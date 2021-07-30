@@ -17,6 +17,7 @@
         <module>news-backend-service-admin</module>
         <module>news-backend-service-article</module>
         <module>news-backend-service-article-generator</module>
+        <module>springcloud-eureka</module>
     </modules>
 
     <packaging>pom</packaging>
