@@ -1,4 +1,4 @@
-package Controller;
+package com.panda.eureka.controller;
 
 import com.panda.json.result.ResponseResult;
 import org.springframework.web.bind.annotation.GetMapping;
