@@ -59,12 +59,9 @@ pagehelper:
     helperDialect: mysql
     supportMethodsArguments: true
 eureka:
-    server:
-        hostname: localhost
-        port: 7000
     client:
         register-with-eureka: true
         fetch-registry: true
         service-url:
-            defaultZone: http://${eureka.server.hostname}:${eureka.server.port}/eureka/
-        
+            defaultZone: http://eureka-server-7000:7000/eureka/,http://eureka-server-7001:7001/eureka/,http://eureka-server-7002:7002/eureka/,
+
