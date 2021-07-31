@@ -58,7 +58,7 @@ public class BaseService {
         try {
             requestEntity =
                     RequestEntity.
-                            get(new URI(getUserServiceListUserApiUrl())).
+                            get(new URI(getUserServiceListUserApiUrlWithLoadBalancer())).
                             accept(MediaType.APPLICATION_JSON).
                             header("userIds", JsonUtils.objectToJson(publisherIds)).build();
         } catch (URISyntaxException e) {
@@ -82,7 +82,14 @@ public class BaseService {
         return "http://" + instance.getHost() + ":" + instance.getPort();
     }
 
+    protected String queryUserServiceUrlWithLoadBalancer() {
+        return "http://" + USER_SERVICE_NAME;
+    }
+
     protected String getUserServiceListUserApiUrl() {
         return queryUserServiceUrl() + "/api/service-user/user/list";
+    }
+    protected String getUserServiceListUserApiUrlWithLoadBalancer() {
+        return queryUserServiceUrlWithLoadBalancer() + "/api/service-user/user/list";
     }
 }
