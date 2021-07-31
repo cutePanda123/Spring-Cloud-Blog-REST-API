@@ -3,6 +3,7 @@
 #################
 
 server:
+    port: ${port:7000}
     tomcat:
         uri-encoding: UTF-8
         max-swallow-size: -1
@@ -14,14 +15,14 @@ spring:
     profiles:
         active: dev
     application:
-        name: springcloud-eureka
+        name: springcloud-eureka-cluster
 eureka:
     instance:
-        hostname: localhost
+        hostname: eureka-server-${server.port}
+    replica-server-port1: ${p1:7001}
+    replica-server-port2: ${p2:7002}
     client:
-        # disable self-registry
-        register-with-eureka: false
-        # disable self-fetch
-        fetch-registry: false
+        register-with-eureka: true
+        fetch-registry: true
         service-url:
-            defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+            defaultZone: http://eureka-server-${eureka.replica-server-port1}:7001/eureka/,http://eureka-server-${eureka.replica-server-port2}:7002/eureka/
