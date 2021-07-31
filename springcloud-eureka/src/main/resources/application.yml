@@ -25,4 +25,4 @@ eureka:
         register-with-eureka: true
         fetch-registry: true
         service-url:
-            defaultZone: http://eureka-server-${eureka.replica-server-port1}:7001/eureka/,http://eureka-server-${eureka.replica-server-port2}:7002/eureka/
+            defaultZone: http://eureka-server-${eureka.replica-server-port1}:${eureka.replica-server-port1}/eureka/,http://eureka-server-${eureka.replica-server-port2}:${eureka.replica-server-port2}/eureka/
