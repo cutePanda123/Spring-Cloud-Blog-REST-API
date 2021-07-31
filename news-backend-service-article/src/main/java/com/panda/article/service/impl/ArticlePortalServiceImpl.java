@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashSet;
@@ -28,8 +27,6 @@ import java.util.Set;
 public class ArticlePortalServiceImpl extends BaseService implements ArticlePortalService {
     @Autowired
     private ArticleMapper articleMapper;
-    @Autowired
-    private RestTemplate restTemplate;
     @Autowired
     private RedisAdaptor redisAdaptor;
 

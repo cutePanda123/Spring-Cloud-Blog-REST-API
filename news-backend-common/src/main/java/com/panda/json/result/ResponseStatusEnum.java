@@ -21,7 +21,8 @@ public enum ResponseStatusEnum {
     FILE_NOT_EXIST_ERROR(514,false,"The file you are viewing does not exist！"),
     USER_STATUS_ERROR(515,false,"User status parameter error！"),
     USER_NOT_EXIST_ERROR(516,false,"User does not exist！"),
-    FILE_CREATE_FAILD(511,false,"File create failed！"),
+    FILE_CREATE_FAILED(517,false,"File create failed！"),
+    SERVICE_NOT_AVAILABLE(518,false,"Service not available！"),
 
     // system level exception 54x
     SYSTEM_INDEX_OUT_OF_BOUNDS(541, false, "System error, array out of bounds！"),

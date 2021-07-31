@@ -33,7 +33,7 @@ public class GeneratedArticlePageController implements ArticleGeneratedPageApi {
         try {
             outputStream = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
-            EncapsulatedException.display(ResponseStatusEnum.FILE_CREATE_FAILD);
+            EncapsulatedException.display(ResponseStatusEnum.FILE_CREATE_FAILED);
         }
         gridFSBucket.downloadToStream(new ObjectId(gridFsId), outputStream);
         return ResponseResult.ok();
