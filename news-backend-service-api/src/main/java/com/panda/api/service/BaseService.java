@@ -17,7 +17,6 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import javax.xml.ws.Service;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
