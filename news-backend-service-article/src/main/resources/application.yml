@@ -64,4 +64,12 @@ eureka:
         fetch-registry: true
         service-url:
             defaultZone: http://eureka-server-7000:7000/eureka/,http://eureka-server-7001:7001/eureka/,http://eureka-server-7002:7002/eureka/,
+ribbon:
+    ConnectTimeout: 5000
+    ReadTimeout: 5000
+    MaxAutoRetries: 1
+    MaxAutoRetriesNextServer: 2
 
+logging:
+    level:
+        root: debug
