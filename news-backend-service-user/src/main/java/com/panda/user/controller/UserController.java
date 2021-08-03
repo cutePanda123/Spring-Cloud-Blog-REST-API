@@ -45,12 +45,18 @@ public class UserController extends BaseController implements UserControllerApi 
         return ResponseResult.ok(userAccountInfoVo);
     }
 
-    @Override
-    public ResponseResult updateUserInfo(@Valid UpdateUserInfoBO updateUserInfoBO, BindingResult result) {
-        if (result.hasErrors()) {
-            return ResponseResult.errorMap(getErrors(result));
-        }
+//    @Override
+//    public ResponseResult updateUserInfoV2(@Valid UpdateUserInfoBO updateUserInfoBO, BindingResult result) {
+//        if (result.hasErrors()) {
+//            return ResponseResult.errorMap(getErrors(result));
+//        }
+//
+//        userService.updateUserInfo(updateUserInfoBO);
+//        return ResponseResult.ok();
+//    }
 
+    @Override
+    public ResponseResult updateUserInfoV2(@Valid UpdateUserInfoBO updateUserInfoBO) {
         userService.updateUserInfo(updateUserInfoBO);
         return ResponseResult.ok();
     }

@@ -19,11 +19,16 @@ public interface UserControllerApi {
     @PostMapping("/getAccountInfo")
     public ResponseResult getAccountInfo(@RequestParam String userId);
 
+//    @ApiOperation(value = "Update user info", notes = "Update user info", httpMethod = "POST")
+//    @PostMapping("/updateUserInfo")
+//    public ResponseResult updateUserInfo(
+//            @RequestBody @Valid UpdateUserInfoBO updateUserInfoBO,
+//            @RequestParam BindingResult result);
+
     @ApiOperation(value = "Update user info", notes = "Update user info", httpMethod = "POST")
     @PostMapping("/updateUserInfo")
-    public ResponseResult updateUserInfo(
-            @RequestBody @Valid UpdateUserInfoBO updateUserInfoBO,
-            @RequestParam BindingResult result);
+    public ResponseResult updateUserInfoV2(
+            @RequestBody @Valid UpdateUserInfoBO updateUserInfoBO);
 
     @ApiOperation(value = "Get user info", notes = "Get user info", httpMethod = "POST")
     @PostMapping("/getUserInfo")
