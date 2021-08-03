@@ -72,4 +72,9 @@ ribbon:
 
 logging:
     level:
-        root: debug
+        com.panda.api.controller.user.UserControllerApi: debug
+feign:
+    client:
+        config:
+            service-user:
+                loggerLevel: FULL
