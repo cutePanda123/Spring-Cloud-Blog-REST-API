@@ -92,7 +92,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         BeanUtils.copyProperties(result, vo);
         Set<String> idSet = new HashSet<>();
         idSet.add(result.getPublishUserId());
-        List<AppUserVo> publisherList = listPublishers(idSet);
+        List<AppUserVo> publisherList = listPublishersV2(idSet);
         if (!publisherList.isEmpty()) {
             vo.setPublishUserName(publisherList.get(0).getNickname());
         }

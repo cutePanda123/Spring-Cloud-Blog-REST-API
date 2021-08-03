@@ -1,6 +1,7 @@
 package com.panda.api.service;
 
 import com.github.pagehelper.PageInfo;
+import com.panda.api.controller.user.UserControllerApi;
 import com.panda.exception.EncapsulatedException;
 import com.panda.json.result.ResponseResult;
 import com.panda.json.result.ResponseStatusEnum;
@@ -42,6 +43,9 @@ public class BaseService {
     @Autowired
     protected DiscoveryClient discoveryClient;
 
+    @Autowired
+    protected UserControllerApi userControllerApi;
+
     protected PaginationResult paginationResultBuilder(List<?> list, Integer page) {
         PageInfo<?> pageInfo = new PageInfo<>(list);
         PaginationResult result = new PaginationResult();
@@ -69,6 +73,15 @@ public class BaseService {
             String users = JsonUtils.objectToJson(responseEntity.getBody().getData());
             userVoList = JsonUtils.jsonToList(users, AppUserVo.class);
         }
+        return userVoList;
+    }
+
+    protected List<AppUserVo> listPublishersV2(Set<String> publisherIds) {
+        ResponseResult result = userControllerApi.listUsers(JsonUtils.objectToJson(publisherIds));
+        List<AppUserVo> userVoList = new LinkedList<>();
+        String users = JsonUtils.objectToJson(result.getData());
+        userVoList = JsonUtils.jsonToList(users, AppUserVo.class);
+
         return userVoList;
     }
 
