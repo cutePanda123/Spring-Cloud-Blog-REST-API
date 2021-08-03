@@ -34,7 +34,6 @@ public class CustomExceptionHandler {
     public ResponseResult returnException(MethodArgumentNotValidException e) {
         BindingResult result = e.getBindingResult();
         Map<String, String> map = getErrors(result);
-        log.error(result.toString());
         return ResponseResult.errorMap(map);
     }
 
