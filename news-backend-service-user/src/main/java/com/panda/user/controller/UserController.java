@@ -1,5 +1,6 @@
 package com.panda.user.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.panda.api.controller.BaseController;
 import com.panda.api.controller.user.UserControllerApi;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@DefaultProperties(defaultFallback = "defaultFallback")
 public class UserController extends BaseController implements UserControllerApi {
     final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -81,7 +83,7 @@ public class UserController extends BaseController implements UserControllerApi 
         if (StringUtils.isBlank(userIds)) {
             return ResponseResult.errorCustom(ResponseStatusEnum.USER_UPDATE_ERROR);
         }
-        int a = 1 / 0;
+
         List<AppUserVo> userVos = new ArrayList<>();
         List<String> userIdList = JsonUtils.jsonToList(userIds, String.class);
         userIdList.forEach(userId -> {
@@ -119,5 +121,9 @@ public class UserController extends BaseController implements UserControllerApi 
             redisAdaptor.set(redisKey, JsonUtils.objectToJson(user));
         }
         return user;
+    }
+
+    public ResponseResult defaultFallback() {
+        return ResponseResult.errorCustom(ResponseStatusEnum.SYSTEM_ERROR);
     }
 }

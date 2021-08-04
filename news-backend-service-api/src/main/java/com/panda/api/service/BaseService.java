@@ -79,8 +79,10 @@ public class BaseService {
     protected List<AppUserVo> listPublishersV2(Set<String> publisherIds) {
         ResponseResult result = userControllerApi.listUsers(JsonUtils.objectToJson(publisherIds));
         List<AppUserVo> userVoList = new LinkedList<>();
-        String users = JsonUtils.objectToJson(result.getData());
-        userVoList = JsonUtils.jsonToList(users, AppUserVo.class);
+        if (result.getStatus() == 200) {
+            String users = JsonUtils.objectToJson(result.getData());
+            userVoList = JsonUtils.jsonToList(users, AppUserVo.class);
+        }
 
         return userVoList;
     }
