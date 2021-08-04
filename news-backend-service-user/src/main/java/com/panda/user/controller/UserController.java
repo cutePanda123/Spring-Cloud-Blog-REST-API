@@ -1,5 +1,6 @@
 package com.panda.user.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.panda.api.controller.BaseController;
 import com.panda.api.controller.user.UserControllerApi;
 import com.panda.json.result.ResponseResult;
@@ -74,11 +75,13 @@ public class UserController extends BaseController implements UserControllerApi 
         return ResponseResult.ok(appUserVo);
     }
 
+    @HystrixCommand(fallbackMethod = "listUsersFallback")
     @Override
     public ResponseResult listUsers(String userIds) {
         if (StringUtils.isBlank(userIds)) {
             return ResponseResult.errorCustom(ResponseStatusEnum.USER_UPDATE_ERROR);
         }
+        int a = 1 / 0;
         List<AppUserVo> userVos = new ArrayList<>();
         List<String> userIdList = JsonUtils.jsonToList(userIds, String.class);
         userIdList.forEach(userId -> {
@@ -86,6 +89,19 @@ public class UserController extends BaseController implements UserControllerApi 
             AppUserVo userVo = new AppUserVo();
             BeanUtils.copyProperties(user, userVo);
             userVos.add(userVo);
+        });
+
+        return ResponseResult.ok(userVos);
+    }
+
+    public ResponseResult listUsersFallback(String userIds) {
+        if (StringUtils.isBlank(userIds)) {
+            return ResponseResult.errorCustom(ResponseStatusEnum.USER_UPDATE_ERROR);
+        }
+        List<AppUserVo> userVos = new ArrayList<>();
+        List<String> userIdList = JsonUtils.jsonToList(userIds, String.class);
+        userIdList.forEach(userId -> {
+            AppUserVo userVo = new AppUserVo();
             userVos.add(userVo);
         });
 
