@@ -78,3 +78,5 @@ feign:
         config:
             service-user:
                 loggerLevel: FULL
+    hystrix:
+        enabled: true

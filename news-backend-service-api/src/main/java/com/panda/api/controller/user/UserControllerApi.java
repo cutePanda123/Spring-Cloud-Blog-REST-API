@@ -1,6 +1,7 @@
 package com.panda.api.controller.user;
 
 import com.panda.api.config.ServiceList;
+import com.panda.api.controller.user.fallback.UserControllerFallbackFactory;
 import com.panda.json.result.ResponseResult;
 import com.panda.pojo.bo.UpdateUserInfoBO;
 import io.swagger.annotations.Api;
@@ -13,7 +14,7 @@ import javax.validation.Valid;
 
 @Api(value = "User info", tags = {"User info controller"})
 @RequestMapping("/api/service-user/user")
-@FeignClient(value = ServiceList.USER_SERVICE)
+@FeignClient(value = ServiceList.USER_SERVICE, fallbackFactory = UserControllerFallbackFactory.class)
 public interface UserControllerApi {
     @ApiOperation(value = "Get user account info", notes = "Get user account info", httpMethod = "POST")
     @PostMapping("/getAccountInfo")
