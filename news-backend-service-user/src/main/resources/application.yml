@@ -57,4 +57,9 @@ hystrix:
                 isolation:
                     thread:
                         timeoutInMillisecond: 2000
+            circuitBreaker:
+                enabled: true
+                requestVolumeThreshold: 10
+                sleepWindowInMilliseconds: 10000
+                errorThresholdPercentage: 50
         
