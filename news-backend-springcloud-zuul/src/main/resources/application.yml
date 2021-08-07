@@ -14,8 +14,10 @@ spring:
     application:
         name: springcloud-zuul
 zuul:
+    prefix: /api
     routes:
         service-article:
             path: /service-article/**
             url: http://127.0.0.1:8007
-    prefix: /api
+            ## example path
+            ## http://localhost:7070/api/service-article/api/service-article/article/portal/get?articleId=210721G32YXRSY80
