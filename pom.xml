@@ -18,6 +18,7 @@
         <module>news-backend-service-article</module>
         <module>news-backend-service-article-generator</module>
         <module>springcloud-eureka</module>
+        <module>news-backend-springcloud-zuul</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -1,0 +1,15 @@
+##################
+# zuul service
+#################
+
+server:
+    port: ${port:7070}
+    tomcat:
+        uri-encoding: UTF-8
+
+######################
+# project config
+######################
+spring:
+    application:
+        name: springcloud-zuul

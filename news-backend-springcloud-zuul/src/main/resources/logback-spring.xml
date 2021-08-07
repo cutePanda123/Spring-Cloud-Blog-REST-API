@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <!-- log file storage path -->
+    <property name="LOG_HOME" value="/Users/username/Projects/news-backend/news-backend-springcloud-zuul/logs"/>
+
+    <!-- Console configuration -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--output format：%d date，%thread thread name，%-5level：level uses 5 characters %msg：log message，%n new line-->
+            <pattern>%white(%d{mm:ss.SSS}) %green([%thread]) %cyan(%-5level) %yellow(%logger{36}) %magenta(-) %black(%msg%n)</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <!-- generate log file daily -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- generated log file name -->
+            <fileNamePattern>${LOG_HOME}/zuul.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--<logger name="org.apache.ibatis.cache.decorators.LoggingCache" level="DEBUG" additivity="false">-->
+    <!--<appender-ref ref="CONSOLE"/>-->
+    <!--</logger>-->
+
+    <root level="info">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
