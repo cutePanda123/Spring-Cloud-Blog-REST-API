@@ -13,3 +13,9 @@ server:
 spring:
     application:
         name: springcloud-zuul
+zuul:
+    routes:
+        service-article:
+            path: /service-article/**
+            url: http://127.0.0.1:8007
+    prefix: /api
