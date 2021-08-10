@@ -20,9 +20,9 @@ import java.awt.*;
 public class IpFilter extends ZuulFilter {
     @Value("${ipBlacklist.maxRequestCount}")
     private Integer maxRequestCount;
-    @Value("{ipBlacklist.interval}")
+    @Value("${ipBlacklist.interval}")
     private Integer interval;
-    @Value("{ipBlacklist}")
+    @Value("${ipBlacklist.frozenDuration}")
     private Integer frozenDuration;
 
     private final static String ipFilterIpRedisKeyPrefix = "zuul-ip-filter-ip:";
@@ -53,10 +53,10 @@ public class IpFilter extends ZuulFilter {
         String ip = IPUtils.getRequestIp(request);
         String frozenDurationRedisKey = IpFilter.ipFilterFrozenDurationRedisKeyPrefix + ip;
         String ipRedisKey = IpFilter.ipFilterIpRedisKeyPrefix + ip;
-        long frozenDuration = redisAdaptor.ttl(frozenDurationRedisKey);
-        if (frozenDuration > 0) {
+        long existingFrozenDuration = redisAdaptor.ttl(frozenDurationRedisKey);
+        if (existingFrozenDuration > 0) {
             blockRequestIp(context);
-            return null;
+            return ResponseResult.errorCustom(ResponseStatusEnum.SYSTEM_ERROR_ZUUL);
         }
         long requestCount = redisAdaptor.increment(ipRedisKey, 1);
         if (requestCount == 1) {
@@ -65,7 +65,7 @@ public class IpFilter extends ZuulFilter {
         if (requestCount > maxRequestCount) {
             redisAdaptor.set(frozenDurationRedisKey, frozenDurationRedisKey, frozenDuration);
             blockRequestIp(context);
-            return null;
+            return ResponseResult.errorCustom(ResponseStatusEnum.SYSTEM_ERROR_ZUUL);
         }
         return null;
     }
