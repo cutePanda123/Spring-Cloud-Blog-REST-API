@@ -13,6 +13,11 @@ server:
 spring:
     application:
         name: springcloud-zuul
+    redis:
+        database: 0
+        host: 127.0.0.1
+        port: 6379
+        password: 123456
 zuul:
     prefix: /api
     routes:
@@ -28,3 +33,7 @@ eureka:
         fetch-registry: true
         service-url:
             defaultZone: http://eureka-server-7000:7000/eureka/,http://eureka-server-7001:7001/eureka/,http://eureka-server-7002:7002/eureka/
+ipBlacklist:
+    maxRequestCount: ${threshold:10}
+    interval: ${interval:10}
+    frozenDuration: ${frozenDuration:15}

@@ -35,6 +35,7 @@ public enum ResponseStatusEnum {
     SYSTEM_CLASS_CAST(548, false, "System error, type coercion error！"),
     SYSTEM_PARSER_ERROR(549, false, "System error, parsing error！"),
     SYSTEM_DATE_PARSER_ERROR(550, false, "System error, date parsing error！"),
+    SYSTEM_ERROR_ZUUL(551, false, "System error, too frequent request error！"),
 
     // admin system exception 56x
     ADMIN_USERNAME_NULL_ERROR(561, false, "Administrator login name cannot be empty！"),
