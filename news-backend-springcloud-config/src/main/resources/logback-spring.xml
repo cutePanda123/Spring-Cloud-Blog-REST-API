@@ -2,7 +2,7 @@
 
 <configuration>
     <!-- log file storage path -->
-    <property name="LOG_HOME" value="/Users/lonli/Projects/news-backend/news-backend-springcloud-zuul/logs"/>
+    <property name="LOG_HOME" value="/Users/developer/Projects/news-backend/news-backend-springcloud-config/logs"/>
 
     <!-- Console configuration -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -17,7 +17,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- generated log file name -->
-            <fileNamePattern>${LOG_HOME}/zuul.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/config.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
