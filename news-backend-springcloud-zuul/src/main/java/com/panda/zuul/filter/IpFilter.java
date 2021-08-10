@@ -77,6 +77,7 @@ public class IpFilter extends ZuulFilter {
                 ResponseResult.errorCustom(ResponseStatusEnum.SYSTEM_ERROR_ZUUL)
         );
         context.setResponseBody(result);
+        context.getResponse().setCharacterEncoding("utf-8");
         context.getResponse().setContentType(MediaType.APPLICATION_JSON_VALUE);
     }
 }
