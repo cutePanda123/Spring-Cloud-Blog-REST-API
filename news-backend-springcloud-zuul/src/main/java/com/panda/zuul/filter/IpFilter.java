@@ -10,19 +10,24 @@ import com.panda.utils.JsonUtils;
 import com.panda.utils.RedisAdaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.awt.*;
 
 @Component
+@RefreshScope
 public class IpFilter extends ZuulFilter {
     @Value("${ipBlacklist.maxRequestCount}")
-    private Integer maxRequestCount;
+    public String maxRequestCountStr;
     @Value("${ipBlacklist.interval}")
-    private Integer interval;
+    public String intervalStr;
     @Value("${ipBlacklist.frozenDuration}")
+    public String frozenDurationStr;
+
+    private Integer maxRequestCount;
+    private Integer interval;
     private Integer frozenDuration;
 
     private final static String ipFilterIpRedisKeyPrefix = "zuul-ip-filter-ip:";
@@ -48,6 +53,7 @@ public class IpFilter extends ZuulFilter {
 
     @Override
     public Object run() throws ZuulException {
+        parseConfigValues();
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
         String ip = IPUtils.getRequestIp(request);
@@ -79,5 +85,11 @@ public class IpFilter extends ZuulFilter {
         context.setResponseBody(result);
         context.getResponse().setCharacterEncoding("utf-8");
         context.getResponse().setContentType(MediaType.APPLICATION_JSON_VALUE);
+    }
+
+    private void parseConfigValues() {
+        interval = Integer.parseInt(intervalStr);
+        maxRequestCount = Integer.parseInt(maxRequestCountStr);
+        frozenDuration = Integer.parseInt(frozenDurationStr);
     }
 }

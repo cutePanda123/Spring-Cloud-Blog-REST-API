@@ -13,6 +13,11 @@ server:
 spring:
     application:
         name: springcloud-config
+    cloud:
+        config:
+            server:
+                git:
+                    uri: https://github.com/cutePanda123/news-backend-config-server-data-source.git
 
 eureka:
     client:

@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    config:
+      label: master
+      name: zuul
+      profile: dev
+      uri: http://127.0.0.1:7080
+      #discovery:
+      #  enabled: true
+      #  service-id: springcloud-config
+
+# automatically refresh config from config server
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+
