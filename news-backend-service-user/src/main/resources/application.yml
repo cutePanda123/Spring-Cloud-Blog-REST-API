@@ -33,6 +33,19 @@ spring:
             pool-name: DateSourceHikariCP
             max-lifetime: 1800000
             connection-test-query: SELECT 1
+    rabbitmq:
+        host: 127.0.0.1
+        port: 5672
+        username: admin
+        password: admin
+        virtual-host: news-dev
+    cloud:
+        stream:
+            bindings:
+                myOutput:
+                    destination: streamExchange
+                myInput:
+                    destination: streamExchange
 mybatis:
     type-aliases-package: com.panda.pojo
     mapper-locations: classpath:mapper/*.xml
