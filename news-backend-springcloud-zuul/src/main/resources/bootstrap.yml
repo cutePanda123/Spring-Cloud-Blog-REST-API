@@ -8,11 +8,17 @@ spring:
       #discovery:
       #  enabled: true
       #  service-id: springcloud-config
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: news-dev
 
 # automatically refresh config from config server
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: refresh
 

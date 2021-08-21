@@ -18,10 +18,22 @@ spring:
             server:
                 git:
                     uri: https://github.com/cutePanda123/news-backend-config-server-data-source.git
-
+    rabbitmq:
+        host: 127.0.0.1
+        port: 5672
+        username: admin
+        password: admin
+        virtual-host: news-dev
 eureka:
     client:
         register-with-eureka: true
         fetch-registry: true
         service-url:
             defaultZone: http://eureka-server-7000:7000/eureka/,http://eureka-server-7001:7001/eureka/,http://eureka-server-7002:7002/eureka/
+
+# automatically refresh config and push to clients by spring cloud bus
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"
