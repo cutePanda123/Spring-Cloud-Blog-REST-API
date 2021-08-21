@@ -46,6 +46,13 @@ spring:
                     destination: streamExchange
                 myInput:
                     destination: streamExchange
+    zipkin:
+        base-url: http://127.0.0.1:9411/
+        sender:
+            type: web
+        sleuth:
+            sampler:
+                probability: 1
 mybatis:
     type-aliases-package: com.panda.pojo
     mapper-locations: classpath:mapper/*.xml
