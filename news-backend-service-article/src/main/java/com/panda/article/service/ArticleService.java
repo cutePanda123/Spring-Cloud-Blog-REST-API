@@ -19,9 +19,9 @@ public interface ArticleService {
 
     public void updateArticleReviewStatus(String articleId, Integer status) throws IOException;
 
-    public void deleteArticle(String userId, String articleId);
+    public void deleteArticle(String userId, String articleId) throws IOException;
 
-    public void withdrawArticle(String userId, String articleId);
+    public void withdrawArticle(String userId, String articleId) throws IOException;
 
     public void saveArticleGridFsFileId(String articleId, String fileId);
 

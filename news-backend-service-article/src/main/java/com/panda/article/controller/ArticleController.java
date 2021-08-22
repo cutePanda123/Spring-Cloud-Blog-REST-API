@@ -34,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -119,7 +120,7 @@ public class ArticleController extends BaseController implements ArticleControll
 
     @Transactional
     @Override
-    public ResponseResult reviewArticle(String articleId, Integer isPassed) {
+    public ResponseResult reviewArticle(String articleId, Integer isPassed) throws IOException {
         Integer reviewStatus = null;
         if (isPassed == YesNoType.yes.type) {
             reviewStatus = ArticleReviewStatus.success.type;
@@ -144,14 +145,14 @@ public class ArticleController extends BaseController implements ArticleControll
 
     @Transactional
     @Override
-    public ResponseResult deleteArticle(String userId, String articleId) {
+    public ResponseResult deleteArticle(String userId, String articleId) throws IOException {
         articleService.deleteArticle(userId, articleId);
         return ResponseResult.ok();
     }
 
     @Transactional
     @Override
-    public ResponseResult withdrawArticle(String userId, String articleId) {
+    public ResponseResult withdrawArticle(String userId, String articleId) throws IOException {
         articleService.withdrawArticle(userId, articleId);
         return ResponseResult.ok();
     }

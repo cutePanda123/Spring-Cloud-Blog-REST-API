@@ -18,6 +18,8 @@ import com.panda.pojo.bo.CreateArticleBo;
 import com.panda.pojo.eo.ArticleEO;
 import com.panda.utils.PaginationResult;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -56,6 +58,8 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     private RestHighLevelClient elasticsearchClient;
 
     private static final Integer GENERAL_REVIEWING_STATUS = 12; // it includes both automatic and manual reviewing
+    private static final String ELASTICSEARCH_ARTICLE_INDEX_NAME = "articles";
+    private static final String ELASTICSEARCH_ARTICLE_INDEX_TYPE = "_doc";
 
     @Transactional
     @Override
@@ -64,7 +68,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         Article article = new Article();
         BeanUtils.copyProperties(bo, article);
         article.setId(articleId);
-        article.setCategoryId(category.getId());
+        article.setCategoryId(3);
         article.setArticleStatus(ArticleReviewStatus.reviewing.type);
         article.setCommentCounts(0);
         article.setReadCounts(0);
@@ -162,23 +166,34 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     }
 
     @Override
-    public void deleteArticle(String userId, String articleId) {
+    public void deleteArticle(String userId, String articleId) throws IOException {
         Example example = exampleBuilder(userId, articleId);
         Article article = new Article();
         article.setIsDelete(YesNoType.yes.type);
         if (articleMapper.updateByExampleSelective(article, example) != 1) {
             EncapsulatedException.display(ResponseStatusEnum.ARTICLE_WITHDRAW_ERROR);
         }
+        DeleteRequest deleteRequest = new DeleteRequest(ELASTICSEARCH_ARTICLE_INDEX_NAME, ELASTICSEARCH_ARTICLE_INDEX_TYPE, articleId);
+        try {
+            DeleteResponse response = elasticsearchClient.delete(deleteRequest, RequestOptions.DEFAULT);
+            System.out.println(response);
+        } catch (Exception e) {
+            Exception x = e;
+            System.out.println(e);
+        }
     }
 
     @Override
-    public void withdrawArticle(String userId, String articleId) {
+    public void withdrawArticle(String userId, String articleId) throws IOException {
         Example example = exampleBuilder(userId, articleId);
         Article article = new Article();
         article.setArticleStatus(ArticleReviewStatus.withdraw.type);
         if (articleMapper.updateByExampleSelective(article, example) != 1) {
             EncapsulatedException.display(ResponseStatusEnum.ARTICLE_WITHDRAW_ERROR);
         }
+        DeleteRequest deleteRequest = new DeleteRequest(ELASTICSEARCH_ARTICLE_INDEX_NAME, ELASTICSEARCH_ARTICLE_INDEX_TYPE, articleId);
+        elasticsearchClient.delete(deleteRequest, RequestOptions.DEFAULT);
+
     }
 
     @Override
@@ -217,13 +232,15 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
             if (result.getIsAppoint() == ArticlePublishType.adhoc.type) {
                 ArticleEO articleEO = new ArticleEO();
                 BeanUtils.copyProperties(result, articleEO);
-                IndexRequest request = new IndexRequest("users");
+                IndexRequest request = new IndexRequest("articles");
                 request.id(articleId);
                 request.source(new ObjectMapper().writeValueAsString(articleEO), XContentType.JSON);
                 try {
                     elasticsearchClient.index(request, RequestOptions.DEFAULT);
                 }catch (Exception e) {
+                    Exception x = e;
                     System.out.println(e);
+                    System.out.println(x);
                 }
             } else {
                 // ToDo: scheduled article should be saved to elasticsearch when it is published
