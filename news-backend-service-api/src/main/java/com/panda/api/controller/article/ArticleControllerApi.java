@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Date;
 
 @Api(value = "article controller", tags = {"article controller"})
@@ -41,7 +42,7 @@ public interface ArticleControllerApi {
     @ApiOperation(value = "review article", notes = "review article", httpMethod = "POST")
     public ResponseResult reviewArticle(
             @RequestParam String articleId,
-            @RequestParam Integer isPassed);
+            @RequestParam Integer isPassed) throws IOException;
 
     @PostMapping("user/delete")
     @ApiOperation(value = "user delete article", notes = "user delete article", httpMethod = "POST")

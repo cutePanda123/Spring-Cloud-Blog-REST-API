@@ -1,5 +1,6 @@
 package com.panda.article.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.panda.api.config.RabbitDelayedMqConfig;
 import com.panda.api.service.BaseService;
@@ -14,8 +15,13 @@ import com.panda.json.result.ResponseStatusEnum;
 import com.panda.pojo.Article;
 import com.panda.pojo.Category;
 import com.panda.pojo.bo.CreateArticleBo;
+import com.panda.pojo.eo.ArticleEO;
 import com.panda.utils.PaginationResult;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.n3r.idworker.Sid;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
@@ -28,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +51,9 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private RestHighLevelClient elasticsearchClient;
 
     private static final Integer GENERAL_REVIEWING_STATUS = 12; // it includes both automatic and manual reviewing
 
@@ -191,7 +201,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 
     @Transactional
     @Override
-    public void updateArticleReviewStatus(String articleId, Integer status) {
+    public void updateArticleReviewStatus(String articleId, Integer status) throws IOException {
         Example example = new Example(Article.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", articleId);
@@ -199,6 +209,25 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         article.setArticleStatus(status);
         if (articleMapper.updateByExampleSelective(article, example) != 1) {
             EncapsulatedException.display(ResponseStatusEnum.ARTICLE_REVIEW_ERROR);
+        }
+
+        // save review passed article to elasticsearch
+        if (status == ArticleReviewStatus.success.type) {
+            Article result = articleMapper.selectByPrimaryKey(articleId);
+            if (result.getIsAppoint() == ArticlePublishType.adhoc.type) {
+                ArticleEO articleEO = new ArticleEO();
+                BeanUtils.copyProperties(result, articleEO);
+                IndexRequest request = new IndexRequest("users");
+                request.id(articleId);
+                request.source(new ObjectMapper().writeValueAsString(articleEO), XContentType.JSON);
+                try {
+                    elasticsearchClient.index(request, RequestOptions.DEFAULT);
+                }catch (Exception e) {
+                    System.out.println(e);
+                }
+            } else {
+                // ToDo: scheduled article should be saved to elasticsearch when it is published
+            }
         }
     }
 
