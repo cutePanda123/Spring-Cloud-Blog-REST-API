@@ -17,6 +17,13 @@ public interface ArticlePortalControllerApi {
                                       @RequestParam Integer page,
                                       @RequestParam Integer pageSize);
 
+    @GetMapping("search")
+    @ApiOperation(value = "list articles for es", notes = "list articles for es", httpMethod = "GET")
+    public ResponseResult searchArticles(@RequestParam String keyword,
+                                             @RequestParam Integer category,
+                                             @RequestParam Integer page,
+                                             @RequestParam Integer pageSize);
+
     @GetMapping("list/populars")
     @ApiOperation(value = "list popular articles", notes = "list popular articles", httpMethod = "GET")
     public ResponseResult listPopularArticles();

@@ -13,15 +13,23 @@ import com.panda.pojo.vo.ArticleVo;
 import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ArticlePortalServiceImpl extends BaseService implements ArticlePortalService {
@@ -29,6 +37,8 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
     private ArticleMapper articleMapper;
     @Autowired
     private RedisAdaptor redisAdaptor;
+    @Autowired
+    private RestHighLevelClient elasticsearchClient;
 
     @Override
     public PaginationResult listArticles(String keyword, Integer category, Integer page, Integer pageSize) {
@@ -67,6 +77,75 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
     }
 
     @Override
+    public PaginationResult searchArticles(String keyword, Integer category, Integer page, Integer pageSize) {
+        // elasticsearch starts from 0
+        if (page < 1) {
+            return null;
+        }
+        --page;
+        SearchRequest searchRequest = new SearchRequest("articles");
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.from(page * pageSize);
+        sourceBuilder.size(pageSize);
+        sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+        if (StringUtils.isBlank(keyword) && category == null) {
+            sourceBuilder.query(QueryBuilders.matchAllQuery());
+        }
+
+        if (StringUtils.isBlank(keyword) && category != null) {
+            sourceBuilder.query(QueryBuilders.termQuery("categoryId", category));
+        }
+
+        if (StringUtils.isNotBlank(keyword) && category == null) {
+            sourceBuilder.query(QueryBuilders.matchQuery("title", keyword));
+        }
+        SearchResponse searchResponse = null;
+        try {
+            searchResponse = elasticsearchClient.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        RestStatus status = searchResponse.status();
+        Boolean terminatedEarly = searchResponse.isTerminatedEarly();
+        boolean timedOut = searchResponse.isTimedOut();
+        if (status != RestStatus.FOUND || terminatedEarly || timedOut) {
+
+        }
+
+        List<Article> articles = new LinkedList<>();
+        SearchHit[] searchHits = searchResponse.getHits().getHits();
+        for (SearchHit hit : searchHits) {
+            String sourceAsString = hit.getSourceAsString();
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String articleId = (String) sourceAsMap.get("id");
+            articles.add(articleMapper.selectByPrimaryKey(articleId));
+        }
+
+        Set<String> publisherIds = new HashSet<>();
+        List<String> articleIds = new LinkedList<>();
+        articles.forEach(article -> {
+            publisherIds.add(article.getPublishUserId());
+            articleIds.add(REDIS_ARTICLE_READ_COUNTS_PREFIX + ":" + article.getId());
+        });
+        List<String> readCounts = redisAdaptor.mget(articleIds);
+        List<AppUserVo> userVoList = listPublishers(publisherIds);
+
+        List<ArticleVo> articleVoList = new LinkedList<>();
+        for (int i = 0; i < articles.size(); ++i) {
+            Article article = articles.get(i);
+            ArticleVo vo = new ArticleVo();
+            BeanUtils.copyProperties(article, vo);
+            vo.setPublisherVO(getArticlePublisher(article.getPublishUserId(), userVoList));
+            String readCount = readCounts.get(i);
+            Integer count = readCount == null ? 0 :  Integer.valueOf(readCount);
+            vo.setReadCount(count);
+            articleVoList.add(vo);
+        }
+        return paginationResultBuilder(articleVoList, page);
+    }
+
+    @Override
     public List<ArticleVo> listPopularArticles() {
         Example example = buildDefaultExample();
         PageHelper.startPage(1, 5);
@@ -92,7 +171,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         BeanUtils.copyProperties(result, vo);
         Set<String> idSet = new HashSet<>();
         idSet.add(result.getPublishUserId());
-        List<AppUserVo> publisherList = listPublishersV2(idSet);
+        List<AppUserVo> publisherList = listPublishers(idSet);//listPublishersV2(idSet);
         if (!publisherList.isEmpty()) {
             vo.setPublishUserName(publisherList.get(0).getNickname());
         }

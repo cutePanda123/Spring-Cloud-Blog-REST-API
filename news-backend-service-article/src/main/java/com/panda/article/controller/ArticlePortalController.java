@@ -38,6 +38,18 @@ public class ArticlePortalController extends BaseController implements ArticlePo
     }
 
     @Override
+    public ResponseResult searchArticles(String keyword, Integer category, Integer page, Integer pageSize) {
+        if (page == null) {
+            page = DEFAULT_START_PAGE;
+        }
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        PaginationResult result = articlePortalService.searchArticles(keyword, category, page, pageSize);
+        return ResponseResult.ok(result);
+    }
+
+    @Override
     public ResponseResult listPopularArticles() {
         return ResponseResult.ok(articlePortalService.listPopularArticles());
     }

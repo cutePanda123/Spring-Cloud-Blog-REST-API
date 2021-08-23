@@ -9,6 +9,8 @@ import java.util.List;
 public interface ArticlePortalService {
     public PaginationResult listArticles(String keyword, Integer category, Integer page, Integer pageSize);
 
+    public PaginationResult searchArticles(String keyword, Integer category, Integer page, Integer pageSize);
+
     public List<ArticleVo> listPopularArticles();
 
     public ArticleDetailVo getArticle(String articleId);
