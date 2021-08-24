@@ -238,9 +238,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
                 try {
                     elasticsearchClient.index(request, RequestOptions.DEFAULT);
                 }catch (Exception e) {
-                    Exception x = e;
                     System.out.println(e);
-                    System.out.println(x);
                 }
             } else {
                 // ToDo: scheduled article should be saved to elasticsearch when it is published

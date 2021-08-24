@@ -173,7 +173,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
             vo.setReadCount(count);
             articleVoList.add(vo);
         }
-        return paginationResultBuilder(articleVoList, page);
+        return paginationResultBuilder(articleVoList, page + 1);
     }
 
     @Override
