@@ -17,11 +17,14 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,8 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
     private RedisAdaptor redisAdaptor;
     @Autowired
     private RestHighLevelClient elasticsearchClient;
+
+    private static final String ELASTICSEARCH_ARTICLE_FIELD_NAME = "title";
 
     @Override
     public PaginationResult listArticles(String keyword, Integer category, Integer page, Integer pageSize) {
@@ -88,6 +93,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         sourceBuilder.from(page * pageSize);
         sourceBuilder.size(pageSize);
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+        boolean isHighlighted = false;
         if (StringUtils.isBlank(keyword) && category == null) {
             sourceBuilder.query(QueryBuilders.matchAllQuery());
         }
@@ -97,29 +103,53 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
         }
 
         if (StringUtils.isNotBlank(keyword) && category == null) {
-            sourceBuilder.query(QueryBuilders.matchQuery("title", keyword));
+            HighlightBuilder highlightBuilder = new HighlightBuilder();
+            String preTag = "<font color='red'>";
+            String postTag = "</font>";
+            highlightBuilder.field(ELASTICSEARCH_ARTICLE_FIELD_NAME)
+                    .preTags(preTag)
+                    .postTags(postTag);
+
+            sourceBuilder.query(QueryBuilders.matchQuery(ELASTICSEARCH_ARTICLE_FIELD_NAME, keyword));
+            sourceBuilder.highlighter(highlightBuilder);
+            isHighlighted = true;
         }
         SearchResponse searchResponse = null;
         try {
+            searchRequest.source(sourceBuilder);
             searchResponse = elasticsearchClient.search(searchRequest, RequestOptions.DEFAULT);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         RestStatus status = searchResponse.status();
-        Boolean terminatedEarly = searchResponse.isTerminatedEarly();
-        boolean timedOut = searchResponse.isTimedOut();
-        if (status != RestStatus.FOUND || terminatedEarly || timedOut) {
 
+        if (status != RestStatus.OK) {
+            List<ArticleVo> articleVoList = new LinkedList<>();
+            return paginationResultBuilder(articleVoList, page);
         }
 
         List<Article> articles = new LinkedList<>();
         SearchHit[] searchHits = searchResponse.getHits().getHits();
+        List<String> articleTitles = new ArrayList<>();
         for (SearchHit hit : searchHits) {
-            String sourceAsString = hit.getSourceAsString();
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
             String articleId = (String) sourceAsMap.get("id");
             articles.add(articleMapper.selectByPrimaryKey(articleId));
+
+            if (!isHighlighted) {
+                articleTitles.add((String) sourceAsMap.get(ELASTICSEARCH_ARTICLE_FIELD_NAME));
+                continue;
+            }
+            HighlightField highlightField = hit.getHighlightFields().get(ELASTICSEARCH_ARTICLE_FIELD_NAME);
+            if (highlightField != null) {
+                Text[] fragments = highlightField.getFragments();
+                StringBuffer buffer = new StringBuffer();
+                for (Text fragment : fragments) {
+                    buffer.append(fragment.toString());
+                }
+                articleTitles.add(buffer.toString());
+            }
         }
 
         Set<String> publisherIds = new HashSet<>();
@@ -136,6 +166,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
             Article article = articles.get(i);
             ArticleVo vo = new ArticleVo();
             BeanUtils.copyProperties(article, vo);
+            vo.setTitle(articleTitles.get(i));
             vo.setPublisherVO(getArticlePublisher(article.getPublishUserId(), userVoList));
             String readCount = readCounts.get(i);
             Integer count = readCount == null ? 0 :  Integer.valueOf(readCount);
