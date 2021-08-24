@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 public class FansController extends BaseController implements FansControllerApi {
     @Autowired
@@ -29,7 +31,7 @@ public class FansController extends BaseController implements FansControllerApi 
     }
 
     @Override
-    public ResponseResult unfollow(String writerId, String userId) {
+    public ResponseResult unfollow(String writerId, String userId) throws IOException {
         fansService.unfollow(writerId, userId);
         return ResponseResult.ok();
     }

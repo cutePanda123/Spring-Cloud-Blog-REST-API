@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
+
 @Api(value = "fans controller", tags = {"fans controller"})
 @RequestMapping("/api/service-user/fans")
 public interface FansControllerApi {
@@ -42,7 +44,7 @@ public interface FansControllerApi {
     public ResponseResult unfollow(
             @RequestParam String writerId,
             @RequestParam String userId
-    );
+    ) throws IOException;
 
     @ApiOperation(
             value = "a user unfollows a writer",

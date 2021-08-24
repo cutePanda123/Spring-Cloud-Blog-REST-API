@@ -1,10 +1,13 @@
 package com.panda.user.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.panda.api.service.BaseService;
 import com.panda.enums.Gender;
 import com.panda.pojo.AppUser;
 import com.panda.pojo.Fans;
+import com.panda.pojo.eo.ArticleEO;
+import com.panda.pojo.eo.FansEo;
 import com.panda.pojo.vo.FansRegionsCountsVo;
 import com.panda.user.mapper.FansMapper;
 import com.panda.user.service.FansService;
@@ -12,11 +15,18 @@ import com.panda.user.service.UserService;
 import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.n3r.idworker.Sid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,6 +43,12 @@ public class FansServiceImpl extends BaseService implements FansService {
 
     @Autowired
     private RedisAdaptor redisAdaptor;
+
+    @Autowired
+    RestHighLevelClient elasticsearchClient;
+
+    private static final String ELASTICSEARCH_FANS_INDEX_NAME = "fans";
+    private static final String ELASTICSEARCH_FANS_INDEX_TYPE = "_doc";
 
     public static final String[] regions = {"北京", "天津", "上海", "重庆",
             "河北", "山西", "辽宁", "吉林", "黑龙江", "江苏", "浙江", "安徽", "福建", "江西", "山东",
@@ -66,17 +82,36 @@ public class FansServiceImpl extends BaseService implements FansService {
         fansMapper.insert(fans);
         redisAdaptor.increment(REDIS_USER_FOLLOW_COUNTS_PREFIX + ":" + userId, 1);
         redisAdaptor.increment(REDIS_WRITER_FANS_COUNTS_PREFIX + ":" + writerId, 1);
+
+        // save fans follow information to elasticsearch
+        FansEo fansEo = new FansEo();
+        BeanUtils.copyProperties(fans, fansEo);
+        IndexRequest request = new IndexRequest(ELASTICSEARCH_FANS_INDEX_NAME);
+        String fansRelationshipSearchId = writerId + "," + userId;
+        request.id(fansRelationshipSearchId);
+
+        try {
+            request.source(new ObjectMapper().writeValueAsString(fans), XContentType.JSON);
+            elasticsearchClient.index(request, RequestOptions.DEFAULT);
+        }catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @Transactional
     @Override
-    public void unfollow(String writerId, String userId) {
+    public void unfollow(String writerId, String userId) throws IOException {
         Fans fans = new Fans();
         fans.setWriterId(writerId);
         fans.setFanId(userId);
         fansMapper.delete(fans);
         redisAdaptor.decrement(REDIS_USER_FOLLOW_COUNTS_PREFIX + ":" + userId, 1);
         redisAdaptor.decrement(REDIS_WRITER_FANS_COUNTS_PREFIX + ":" + writerId, 1);
+
+        // delete fans follow information from elasticsearch
+        String fansRelationshipSearchId = writerId + "," + userId;
+        DeleteRequest deleteRequest = new DeleteRequest("fans", "_doc", fansRelationshipSearchId);
+        elasticsearchClient.delete(deleteRequest, RequestOptions.DEFAULT);
     }
 
     @Override
