@@ -56,7 +56,7 @@ public class FansController extends BaseController implements FansControllerApi 
 
     @Override
     public ResponseResult countFansRegions(String writerId) {
-        return ResponseResult.ok(fansService.getFansCountByRegion(writerId));
+        return ResponseResult.ok(fansService.getFansCountByRegionV2(writerId));
     }
 
     @Override

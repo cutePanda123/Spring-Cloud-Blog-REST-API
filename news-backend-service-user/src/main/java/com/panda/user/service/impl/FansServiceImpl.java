@@ -241,7 +241,31 @@ public class FansServiceImpl extends BaseService implements FansService {
 
     @Override
     public List<FansRegionsCountsVo> getFansCountByRegionV2(String writerId) {
-        return null;
+        List<FansRegionsCountsVo> fansRegionsCountsVos = new LinkedList<>();
+
+        for (String region : regions) {
+            CountRequest countRequest = new CountRequest(ELASTICSEARCH_FANS_INDEX_NAME);
+            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+            searchSourceBuilder.query(QueryBuilders.termQuery("province", region));
+            countRequest.source(searchSourceBuilder);
+            CountResponse countResponse = null;
+            try {
+                countResponse = elasticsearchClient.count(countRequest, RequestOptions.DEFAULT);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            int count = 0;
+            if (countResponse.status() != RestStatus.OK) {
+                count = 0;
+            } else {
+                count = (int)countResponse.getCount();
+            }
+            FansRegionsCountsVo vo = new FansRegionsCountsVo();
+            vo.setName(region);
+            vo.setValue(count);
+            fansRegionsCountsVos.add(vo);
+        }
+        return fansRegionsCountsVos;
     }
 
     @Override
