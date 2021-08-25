@@ -2,6 +2,7 @@ package com.panda.user.service;
 
 import com.panda.enums.Gender;
 import com.panda.json.result.ResponseResult;
+import com.panda.pojo.vo.FansGendersCountsVo;
 import com.panda.pojo.vo.FansRegionsCountsVo;
 import com.panda.utils.PaginationResult;
 
@@ -29,7 +30,11 @@ public interface FansService {
 
     public Integer getFansCountByGender(String writerId, Gender gender);
 
+    public Integer getFansCountByGenderV2(String userId, Gender gender);
+
     public List<FansRegionsCountsVo> getFansCountByRegion(String writerId);
+
+    public List<FansRegionsCountsVo> getFansCountByRegionV2(String writerId);
 
     public void syncFansInfo(String relationshipId, String fansId);
 }

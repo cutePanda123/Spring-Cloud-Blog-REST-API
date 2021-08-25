@@ -46,8 +46,8 @@ public class FansController extends BaseController implements FansControllerApi 
 
     @Override
     public ResponseResult countFansGenders(String writerId) {
-        Integer maleCount = fansService.getFansCountByGender(writerId, Gender.male);
-        Integer femaleCount = fansService.getFansCountByGender(writerId, Gender.female);
+        Integer maleCount = fansService.getFansCountByGenderV2(writerId, Gender.male);
+        Integer femaleCount = fansService.getFansCountByGenderV2(writerId, Gender.female);
         FansGendersCountsVo vo = new FansGendersCountsVo();
         vo.setFemaleCount(femaleCount);
         vo.setMaleCount(maleCount);

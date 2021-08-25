@@ -5,19 +5,14 @@ import com.github.pagehelper.PageHelper;
 import com.panda.api.service.BaseService;
 import com.panda.enums.Gender;
 import com.panda.pojo.AppUser;
-import com.panda.pojo.Article;
 import com.panda.pojo.Fans;
-import com.panda.pojo.eo.ArticleEO;
 import com.panda.pojo.eo.FansEo;
-import com.panda.pojo.vo.AppUserVo;
-import com.panda.pojo.vo.ArticleVo;
 import com.panda.pojo.vo.FansRegionsCountsVo;
 import com.panda.user.mapper.FansMapper;
 import com.panda.user.service.FansService;
 import com.panda.user.service.UserService;
 import com.panda.utils.PaginationResult;
 import com.panda.utils.RedisAdaptor;
-import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
@@ -26,14 +21,16 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.text.Text;
+import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,6 +200,30 @@ public class FansServiceImpl extends BaseService implements FansService {
     }
 
     @Override
+    public Integer getFansCountByGenderV2(String userId, Gender gender) {
+        CountRequest countRequest = new CountRequest(ELASTICSEARCH_FANS_INDEX_NAME);
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        MatchPhraseQueryBuilder writerIdQuery = QueryBuilders
+                .matchPhraseQuery("writerId", userId);
+        MatchPhraseQueryBuilder genderQuery = QueryBuilders
+                .matchPhraseQuery("sex", String.valueOf(gender.type));
+        boolQueryBuilder.must(writerIdQuery).must(genderQuery);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(boolQueryBuilder);
+        countRequest.source(searchSourceBuilder);
+        CountResponse countResponse = null;
+        try {
+            countResponse = elasticsearchClient.count(countRequest, RequestOptions.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (countResponse.status() != RestStatus.OK) {
+            return 0;
+        }
+        return (int)countResponse.getCount();
+    }
+
+    @Override
     public List<FansRegionsCountsVo> getFansCountByRegion(String writerId) {
         List<FansRegionsCountsVo> fansRegionsCountsVos = new LinkedList<>();
         Fans fans = new Fans();
@@ -216,6 +237,11 @@ public class FansServiceImpl extends BaseService implements FansService {
             fansRegionsCountsVos.add(vo);
         }
         return fansRegionsCountsVos;
+    }
+
+    @Override
+    public List<FansRegionsCountsVo> getFansCountByRegionV2(String writerId) {
+        return null;
     }
 
     @Override
