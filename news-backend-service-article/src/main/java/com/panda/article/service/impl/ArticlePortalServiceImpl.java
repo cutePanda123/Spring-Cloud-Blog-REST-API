@@ -126,7 +126,7 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
 
         if (status != RestStatus.OK) {
             List<ArticleVo> articleVoList = new LinkedList<>();
-            return paginationResultBuilder(articleVoList, page);
+            return paginationResultBuilder(articleVoList, page + 1);
         }
 
         List<Article> articles = new LinkedList<>();
