@@ -22,6 +22,8 @@ import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.text.Text;
@@ -99,8 +101,8 @@ public class FansServiceImpl extends BaseService implements FansService {
         FansEo fansEo = new FansEo();
         BeanUtils.copyProperties(fans, fansEo);
         IndexRequest request = new IndexRequest(ELASTICSEARCH_FANS_INDEX_NAME);
-        String fansRelationshipSearchId = writerId + "," + userId;
-        request.id(fansRelationshipSearchId);
+        String docId = writerId + "," + userId;
+        request.id(docId);
 
         try {
             request.source(new ObjectMapper().writeValueAsString(fans), XContentType.JSON);
@@ -121,8 +123,8 @@ public class FansServiceImpl extends BaseService implements FansService {
         redisAdaptor.decrement(REDIS_WRITER_FANS_COUNTS_PREFIX + ":" + writerId, 1);
 
         // delete fans follow information from elasticsearch
-        String fansRelationshipSearchId = writerId + "," + userId;
-        DeleteRequest deleteRequest = new DeleteRequest("fans", ELASTICSEARCH_FANS_INDEX_TYPE, fansRelationshipSearchId);
+        String docId = writerId + "," + userId;
+        DeleteRequest deleteRequest = new DeleteRequest("fans", ELASTICSEARCH_FANS_INDEX_TYPE, docId);
         elasticsearchClient.delete(deleteRequest, RequestOptions.DEFAULT);
     }
 
@@ -214,5 +216,28 @@ public class FansServiceImpl extends BaseService implements FansService {
             fansRegionsCountsVos.add(vo);
         }
         return fansRegionsCountsVos;
+    }
+
+    @Override
+    public void syncFansInfo(String relationshipId, String fansId) {
+        AppUser user = userService.getUser(fansId);
+        Fans fans = new Fans();
+        fans.setId(relationshipId);
+        fans.setFanNickname((user.getNickname()));
+        fans.setSex(user.getSex());
+        fans.setProvince(user.getProvince());
+        fans.setFace(user.getFace());
+
+        fansMapper.updateByPrimaryKeySelective(fans);
+        fans = fansMapper.selectByPrimaryKey(relationshipId);
+        String docId = fans.getWriterId() + "," + fansId;
+        UpdateRequest request = new UpdateRequest("fans", docId)
+                .doc("face", user.getFace(), "fanNickname",user.getNickname(),
+                        "sex", user.getSex(), "province", user.getProvince());
+        try {
+            UpdateResponse updateResponse = elasticsearchClient.update(request, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

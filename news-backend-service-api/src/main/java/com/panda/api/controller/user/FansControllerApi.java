@@ -64,4 +64,15 @@ public interface FansControllerApi {
 
     @PostMapping("/count/regions")
     public ResponseResult countFansRegions(@RequestParam String writerId);
+
+    @ApiOperation(
+            value = "update fans information in elasticsearch",
+            notes = "update fans information in elasticsearch",
+            httpMethod = "POST"
+    )
+    @PostMapping("/sync")
+    public ResponseResult syncFansInfo(
+            @RequestParam String relationshipId,
+            @RequestParam String fansId
+    );
 }
