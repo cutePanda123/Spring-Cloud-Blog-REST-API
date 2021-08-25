@@ -22,6 +22,10 @@ public interface FansService {
                                      Integer page,
                                      Integer pageSize);
 
+    public PaginationResult listFansV2(String writerId,
+                                     Integer page,
+                                     Integer pageSize);
+
     public Integer getFansCountByGender(String writerId, Gender gender);
 
     public List<FansRegionsCountsVo> getFansCountByRegion(String writerId);

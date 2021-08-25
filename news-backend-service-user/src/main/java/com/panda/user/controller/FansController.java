@@ -41,7 +41,7 @@ public class FansController extends BaseController implements FansControllerApi 
         if (StringUtils.isBlank(writerId)) {
             return ResponseResult.errorCustom(ResponseStatusEnum.FAILED);
         }
-        return ResponseResult.ok(fansService.listFans(writerId, page, pageSize));
+        return ResponseResult.ok(fansService.listFansV2(writerId, page, pageSize));
     }
 
     @Override

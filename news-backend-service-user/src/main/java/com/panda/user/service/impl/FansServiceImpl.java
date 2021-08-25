@@ -5,9 +5,12 @@ import com.github.pagehelper.PageHelper;
 import com.panda.api.service.BaseService;
 import com.panda.enums.Gender;
 import com.panda.pojo.AppUser;
+import com.panda.pojo.Article;
 import com.panda.pojo.Fans;
 import com.panda.pojo.eo.ArticleEO;
 import com.panda.pojo.eo.FansEo;
+import com.panda.pojo.vo.AppUserVo;
+import com.panda.pojo.vo.ArticleVo;
 import com.panda.pojo.vo.FansRegionsCountsVo;
 import com.panda.user.mapper.FansMapper;
 import com.panda.user.service.FansService;
@@ -17,9 +20,18 @@ import com.panda.utils.RedisAdaptor;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.text.Text;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +39,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class FansServiceImpl extends BaseService implements FansService {
@@ -110,7 +122,7 @@ public class FansServiceImpl extends BaseService implements FansService {
 
         // delete fans follow information from elasticsearch
         String fansRelationshipSearchId = writerId + "," + userId;
-        DeleteRequest deleteRequest = new DeleteRequest("fans", "_doc", fansRelationshipSearchId);
+        DeleteRequest deleteRequest = new DeleteRequest("fans", ELASTICSEARCH_FANS_INDEX_TYPE, fansRelationshipSearchId);
         elasticsearchClient.delete(deleteRequest, RequestOptions.DEFAULT);
     }
 
@@ -139,6 +151,45 @@ public class FansServiceImpl extends BaseService implements FansService {
         PageHelper.startPage(page, pageSize);
         List<Fans> fansList = fansMapper.select(fans);
         return paginationResultBuilder(fansList, page);
+    }
+
+    @Override
+    public PaginationResult listFansV2(String writerId, Integer page, Integer pageSize) {
+        // elasticsearch starts from 0
+        if (page < 1) {
+            return null;
+        }
+        --page;
+        SearchRequest searchRequest = new SearchRequest(ELASTICSEARCH_FANS_INDEX_NAME);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.from(page * pageSize);
+        sourceBuilder.size(pageSize);
+        sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+        sourceBuilder.query(QueryBuilders.termQuery("writerId", writerId));
+
+        SearchResponse searchResponse = null;
+        try {
+            searchRequest.source(sourceBuilder);
+            searchResponse = elasticsearchClient.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        RestStatus status = searchResponse.status();
+
+        List<FansEo> fansList = new LinkedList<>();
+        if (status != RestStatus.OK) {
+            return paginationResultBuilder(fansList, page + 1);
+        }
+
+        SearchHit[] searchHits = searchResponse.getHits().getHits();
+        for (SearchHit hit : searchHits) {
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            FansEo fansEo = new ObjectMapper().convertValue(sourceAsMap, FansEo.class);
+            fansList.add(fansEo);
+        }
+
+        return paginationResultBuilder(fansList, page + 1);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class FansEo {
     @Field
     private String face;
     @Field
-    private String fanNickName;
+    private String fanNickname;
     @Field
     private Integer sex;
     @Field
