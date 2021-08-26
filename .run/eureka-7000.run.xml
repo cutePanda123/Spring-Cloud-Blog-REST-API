@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="eureka-7000" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.panda.eureka.Application" />
+    <module name="news-backend-springcloud-eureka" />
+    <option name="VM_PARAMETERS" value="-DPORT=7000 -DP1=7001 -DP2=7002" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

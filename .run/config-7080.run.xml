@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="config-7080" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="Application" />
+    <module name="news-backend-springcloud-config" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
