@@ -37,7 +37,7 @@
 
 <h4>This is a Spring Cloud blog application REST API with tons of ready-to-use features. The idea was to build a blogging platform that can be used as a starter for larger projects. It was made with Maven, Spring Boot, Spring Cloud, FreeMarker, Nginx, Tomcat, MySQL, MongoDB, Redis, RabbitMQ, ElasticSearch, and Alibaba Cloud Content Moderation and Face Detection Service</h4>
 <br/>
-<img src="./images/blog-home-page.PNG" alt="drawing" width="600"/>
+<img src="./images/blog-home-page.png" alt="drawing" width="600"/>
 <br/>
 <br/>
 
