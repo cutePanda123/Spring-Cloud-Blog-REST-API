@@ -68,7 +68,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         Article article = new Article();
         BeanUtils.copyProperties(bo, article);
         article.setId(articleId);
-        article.setCategoryId(3);
+        article.setCategoryId(category.getId());
         article.setArticleStatus(ArticleReviewStatus.reviewing.type);
         article.setCommentCounts(0);
         article.setReadCounts(0);
