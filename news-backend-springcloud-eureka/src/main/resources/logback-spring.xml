@@ -2,7 +2,7 @@
 
 <configuration>
     <!-- log file storage path -->
-    <property name="LOG_HOME" value="/Users/username/Projects/news-backend/news-backend-springcloud-eureka/logs"/>
+    <property name="LOG_HOME" value="/Users/developer/Projects/news-backend/news-backend-springcloud-eureka/logs"/>
 
     <!-- Console configuration -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

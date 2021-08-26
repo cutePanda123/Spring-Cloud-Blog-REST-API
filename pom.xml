@@ -17,7 +17,7 @@
         <module>news-backend-service-admin</module>
         <module>news-backend-service-article</module>
         <module>news-backend-service-article-generator</module>
-        <module>springcloud-eureka</module>
+        <module>news-backend-springcloud-eureka</module>
         <module>news-backend-springcloud-zuul</module>
         <module>news-backend-springcloud-config</module>
         <module>news-backend-service-search</module>
