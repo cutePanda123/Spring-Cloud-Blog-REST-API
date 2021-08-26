@@ -1,0 +1,941 @@
+{
+  "version": 6,
+  "entities": [
+    {
+      "entity": {
+        "type": "Project",
+        "id": "8106825f-05be-4d39-87aa-a20c371cef3d",
+        "name": "news-backend"
+      },
+      "children": [
+        {
+          "entity": {
+            "type": "Service",
+            "id": "95ed5837-a66b-406d-8f6e-f08ea1ffada2",
+            "name": "API"
+          },
+          "children": [
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "multipart/form-data",
+                    "items": []
+                  },
+                  "bodyType": "Form",
+                  "textBody": "{\n  \"mobile\": \"12345678\",\n  \"smsCode\": \"158776\"\n}"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "userId",
+                        "value": "210618C3MZPMBA14"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8003",
+                  "path": "/api/service-user/user/getAccountInfo"
+                },
+                "id": "3a0a844e-7808-4faf-ae83-954c0e7c9c81",
+                "name": "Get user account info",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "multipart/form-data"
+                  },
+                  {
+                    "enabled": true,
+                    "name": "headerUserId",
+                    "value": "210618C3MZPMBA14"
+                  },
+                  {
+                    "enabled": true,
+                    "name": "headerUserToken",
+                    "value": "bb76034d-db17-4ecf-94be-4968bfb804c5"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "multipart/form-data",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "mobile",
+                        "value": ""
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "smsCode",
+                        "value": ""
+                      }
+                    ]
+                  },
+                  "bodyType": "Text",
+                  "textBody": "{\n  \"mobile\": \"12345678\",\n  \"smsCode\": \"146228\"\n}"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8003",
+                  "path": "/api/service-user/passport/doLogin"
+                },
+                "id": "435cc3aa-784a-4488-8ba2-2d6e4b506378",
+                "name": "Login",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "mobile",
+                        "value": "12345678"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8003",
+                  "path": "/api/service-user/passport/getSMSCode"
+                },
+                "id": "510d9dcf-38c7-4615-b9cd-79b47408932b",
+                "name": "Sms code",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8006",
+                  "path": "/api/service-admin/healthcheck/checkwebserver"
+                },
+                "id": "de7a9d93-de26-4b98-9914-ab96a2a17e21",
+                "name": "admin service healthcheck",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "files.news.com:8007",
+                  "path": "/api/service-article/healthcheck/testCloudStream"
+                },
+                "id": "f8d528cc-1eb7-48ee-88ff-508297d0df6f",
+                "name": "article service cloud stream message send",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "files.news.com:8007",
+                  "path": "/api/service-article/healthcheck/checkwebserver"
+                },
+                "id": "f494bbc5-527d-4c77-94bd-fa2c96d5a16f",
+                "name": "article service healthcheck",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text",
+                  "textBody": "{\n  \"analyzer\": \"ik_max_word\",\n  \"text\": \"我是中国人\"\n}"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:9200",
+                  "path": "/_analyze"
+                },
+                "id": "832bb4b5-fe5a-4169-a619-1cde6b93513d",
+                "name": "elasticsearch analyze test",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text",
+                  "textBody": "\n{\n    \"properties\": {\n        \"id\": {\n            \"type\": \"text\"\n        },\n        \"title\": {\n            \"type\": \"text\",\n            \"analyzer\": \"ik_max_word\"\n        },\n        \"categoryId\": {\n            \"type\": \"integer\"\n        },\n        \"articleType\": {\n            \"type\": \"integer\"\n        },\n        \"articleCover\": {\n            \"type\": \"keyword\"\n        },\n        \"publishUserId\": {\n            \"type\": \"text\"\n        },\n        \"publishTime\": {\n            \"type\": \"date\"\n        }\n    }\n}\n"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "include_type_name",
+                        "value": "true"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:9200",
+                  "path": "/articles/_doc/_mapping"
+                },
+                "id": "38edc3d6-562a-427d-899c-f71c09c6ea76",
+                "name": "elasticsearch create article mapping",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text",
+                  "textBody": "{\n  \"properties\": {\n    \"id\": {\n      \"type\": \"text\"\n    },\n    \"writerId\": {\n      \"type\": \"keyword\"\n    },\n    \"fanId\": {\n      \"type\": \"keyword\"\n    },\n    \"face\": {\n      \"type\": \"keyword\"\n    },\n    \"fanNickname\": {\n      \"type\": \"text\",\n      \"analyzer\": \"ik_max_word\"\n    },\n    \"sex\": {\n      \"type\": \"integer\"\n    },\n    \"province\": {\n      \"type\": \"keyword\"\n    }\n  }\n}"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "include_type_name",
+                        "value": "true"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:9200",
+                  "path": "/fans/_doc/_mapping"
+                },
+                "id": "10c1f425-022a-4a72-be25-f24a38b3e730",
+                "name": "elasticsearch create fans mapping",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "category",
+                        "value": ""
+                      },
+                      {
+                        "enabled": true,
+                        "name": "keyword",
+                        "value": "德国"
+                      },
+                      {
+                        "enabled": true,
+                        "name": "page",
+                        "value": "1"
+                      },
+                      {
+                        "enabled": true,
+                        "name": "pageSize",
+                        "value": "5"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "www.news.com:8007",
+                  "path": "/api/service-article/article/portal/search"
+                },
+                "id": "1b0cfdfc-e6dd-4a40-acd2-2a6034e93c09",
+                "name": "elasticsearch search article",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text",
+                  "textBody": "{\n  \"query\": {\n    \"match\": {\n      \"title\": \"汽车\"\n    }\n  }\n}"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:9200",
+                  "path": "/users/_doc/_search"
+                },
+                "id": "067f982b-274e-4c8f-b900-667195b69ea9",
+                "name": "elasticsearch search test",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8003",
+                  "path": "/api/service-user/healthcheck/checkwebserver"
+                },
+                "id": "64d83622-3cf6-4149-93eb-610a3167e44e",
+                "name": "eureka service healthcheck",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "files.news.com:8004",
+                  "path": "/api/service-files/healthcheck/checkwebserver"
+                },
+                "id": "23ee0cfc-ebb7-45fe-a2be-47febcff2dee",
+                "name": "file service healthcheck",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "articleId",
+                        "value": "210721G32YXRSY80"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "www.news.com:8007",
+                  "path": "/api/service-article/article/portal/get"
+                },
+                "id": "fbec2bc3-e6fc-4636-a771-34e9f1ea9cc0",
+                "name": "get article detail",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "articleId",
+                        "value": "210721G32YXRSY80"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:7070",
+                  "path": "/api/service-article/api/service-article/article/portal/get"
+                },
+                "id": "873b006a-1d22-46fd-bfd3-a6c49b66de7b",
+                "name": "get article detail(zuul)",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "articleId",
+                        "value": "210721G32YXRSY80"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "www.news.com:8007",
+                  "path": "/api/service-article//article/portal/readcount"
+                },
+                "id": "0e9004c5-4ab5-4512-bd4a-a93fe21f5165",
+                "name": "get article read count",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "category",
+                        "value": ""
+                      },
+                      {
+                        "enabled": true,
+                        "name": "keyword",
+                        "value": ""
+                      },
+                      {
+                        "enabled": true,
+                        "name": "page",
+                        "value": "1"
+                      },
+                      {
+                        "enabled": true,
+                        "name": "pageSize",
+                        "value": "5"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "www.news.com:8007",
+                  "path": "/api/service-article/article/portal/search"
+                },
+                "id": "d4546e5e-8ddd-4f0e-879e-c01f01812cae",
+                "name": "list articles",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "",
+                    "value": ""
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "faceId",
+                        "value": "60e12eed4c6e662678ea9109"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "files.news.com:8004",
+                  "path": "/api/service-files//fs/readFace64InGridFS"
+                },
+                "id": "0809d1ae-b1ae-436d-a615-898c0adb6482",
+                "name": "read face image",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:7070",
+                  "path": "/actuator/refresh"
+                },
+                "id": "d12b9784-95f9-4b36-a401-9bcd5ca7b003",
+                "name": "refresh config from config source (pull mode)",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:7080",
+                  "path": "/actuator/bus-refresh"
+                },
+                "id": "c50bb043-625b-43f4-8570-b46b2476ef69",
+                "name": "refresh config from config source (push mode)",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "multipart/form-data",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "id",
+                        "value": "123"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "linkName",
+                        "value": "ab"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "linkUrl",
+                        "value": "xyz"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "isDelete",
+                        "value": "0"
+                      }
+                    ]
+                  },
+                  "bodyType": "Text",
+                  "textBody": "{\n\t\"id\": \"123\",\n\t\"linkName\": \"link1\",\n    \"linkUrl\": \"\",\n    \"isDelete\": 0\n}"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "www.news.com:8006",
+                  "path": "/api/service-admin/relatedLinkMng/saveOrUpdateRelatedLink"
+                },
+                "id": "943e539a-0ff7-4e31-b41e-ef728f935f26",
+                "name": "related website link",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8003",
+                  "path": "/api/service-user/healthcheck/checkwebserver"
+                },
+                "id": "718d3e0b-070e-4cea-8983-e426c8221e66",
+                "name": "user service healthcheck",
+                "headers": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
