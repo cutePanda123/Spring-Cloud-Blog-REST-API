@@ -220,49 +220,49 @@ Micro-services - Run with IntelliJ IDE
 * Home page
   <br/>
   <br/>
-  <img src="./images/blog-home-page.png" alt="drawing" width="500"/>
+  <img src="./images/blog-home-page.png" alt="drawing" width="600" height="400"/>
   <br/>
   <br/>
 * User page
   <br/>
   <br/>
-  <img src="./images/user-page.png" alt="drawing" width="500"/>
+  <img src="./images/user-page.png" alt="drawing" width="600" height="400"/>
   <br/>
   <br/>
 * Admin page
   <br/>
   <br/>
-  <img src="./images/admin-page.png" alt="drawing" width="500"/>
+  <img src="./images/admin-page.png" alt="drawing" width="600" height="400"/>
   <br/>
   <br/>
 * User login page
   <br/>
   <br/>
-  <img src="./images/user-login-page.png" alt="drawing" width="500"/>
+  <img src="./images/user-login-page.png" alt="drawing" width="600" height="400"/>
   <br/>
   <br/>
 * Admin login page
   <br/>
   <br/>
-  <img src="./images/admin-login-page.png" alt="drawing" width="500"/>
+  <img src="./images/admin-login-page.png" alt="drawing" width="600" height="400"/>
   <br/>
   <br/>
 * Create a blog
   <br/>
   <br/>
-  <img src="./images/create-blog.png" alt="drawing" width="500"/>
+  <img src="./images/create-blog.png" alt="drawing" width="600" height="400"/>
   <br/>
   <br/>
 * Read and comment a blog
   <br/>
   <br/>
-  <img src="./images/read-comment-blog.png" alt="drawing" width="500"/>
+  <img src="./images/read-comment-blog.png" alt="drawing" width="600" height="400"/>
   <br/>
   <br/>
 * Fans analysis page
   <br/>
   <br/>
-  <img src="./images/followers-analysis.png" alt="drawing" width="500"/>
+  <img src="./images/followers-analysis.png" alt="drawing" width="600" height="400"/>
   <br/>
   <br/>
 
