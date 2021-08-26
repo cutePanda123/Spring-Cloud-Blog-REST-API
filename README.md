@@ -189,7 +189,7 @@ docker run --name mynginx1 -p 80:80 -d nginx
 Micro-services - Run with IntelliJ IDE
  - Clone the Git repositore:
     ```sh
-    https://github.com/cutePanda123/news-backend.git
+    https://github.com/cutePanda123/Spring-Cloud-Blog-REST-API.git
     ```
  - Import the project into IntelliJ IDE
  - Install and build:
@@ -273,18 +273,18 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <br/>
 
 ## Contact
-Project Link: [https://github.com/cutePanda123/news-backend](https://github.com/cutePanda123/news-backend)
+Project Link: [https://github.com/cutePanda123/Spring-Cloud-Blog-REST-API](https://github.com/cutePanda123/Spring-Cloud-Blog-REST-API)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/cutePanda123/news-backend.svg?style=for-the-badge
-[contributors-url]: https://github.com/cutePanda123/news-backend/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/cutePanda123/news-backend.svg?style=for-the-badge
-[forks-url]: https://github.com/cutePanda123/news-backend/network/members
-[stars-shield]: https://img.shields.io/github/stars/cutePanda123/news-backend.svg?style=for-the-badge
-[stars-url]: https://github.com/cutePanda123/news-backend/stargazers
-[issues-shield]: https://img.shields.io/github/issues/cutePanda123/news-backend.svg?style=for-the-badge
-[issues-url]: https://github.com/cutePanda123/news-backend/issues
-[license-shield]: https://img.shields.io/github/license/cutePanda123/news-backend.svg?style=for-the-badge
-[license-url]: https://github.com/cutePanda123/news-backend/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/cutePanda123/Spring-Cloud-Blog-REST-API.svg?style=for-the-badge
+[contributors-url]: https://github.com/cutePanda123/Spring-Cloud-Blog-REST-API/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/cutePanda123/Spring-Cloud-Blog-REST-API.svg?style=for-the-badge
+[forks-url]: https://github.com/cutePanda123/Spring-Cloud-Blog-REST-API/network/members
+[stars-shield]: https://img.shields.io/github/stars/cutePanda123/Spring-Cloud-Blog-REST-API.svg?style=for-the-badge
+[stars-url]: https://github.com/cutePanda123/Spring-Cloud-Blog-REST-API/stargazers
+[issues-shield]: https://img.shields.io/github/issues/cutePanda123/Spring-Cloud-Blog-REST-API.svg?style=for-the-badge
+[issues-url]: https://github.com/cutePanda123/Spring-Cloud-Blog-REST-API/issues
+[license-shield]: https://img.shields.io/github/license/cutePanda123/Spring-Cloud-Blog-REST-API.svg?style=for-the-badge
+[license-url]: https://github.com/cutePanda123/Spring-Cloud-Blog-REST-API/blob/master/LICENSE.txt
