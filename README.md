@@ -43,8 +43,8 @@
 
 
 ## Features
-- Posts: crud / category / recommendation
-- Comment: crud
+- Posts: CRUD / category / recommendation
+- Comment: CRUD
 - User: register / login/ logout
 - Admin: user management / posts review / IP blacklisting / role assignment / partnership links
 - Search: searching / highlighting
